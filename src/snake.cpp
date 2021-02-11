@@ -93,6 +93,8 @@ float GridSnake::GetHeadX() const { return _head_x; }
 
 float GridSnake::GetHeadY() const { return _head_y; }
 
-void GridSnake::ChangeSpeed(float change) { _speed += change; }
-
 const std::vector<SDL_Point> &GridSnake::GetBody() const { return _body; }
+
+float GridSnake::GetSpeed() const { return _speed; }
+
+void GridSnake::SetSpeed(float speed) { _speed = speed; }

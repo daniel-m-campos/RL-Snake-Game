@@ -21,8 +21,9 @@ class Snake {
   virtual bool IsAlive() const = 0;
   virtual float GetHeadX() const = 0;
   virtual float GetHeadY() const = 0;
-  virtual void ChangeSpeed(float change) = 0;
-  virtual const std::vector<SDL_Point>& GetBody() const = 0;
+  virtual float GetSpeed() const = 0;
+  virtual void SetSpeed(float speed) = 0;
+  virtual const std::vector<SDL_Point> &GetBody() const = 0;
 };
 
 class GridSnake : public Snake {
@@ -42,7 +43,8 @@ class GridSnake : public Snake {
   bool IsAlive() const override;
   float GetHeadX() const override;
   float GetHeadY() const override;
-  void ChangeSpeed(float change) override;
+  float GetSpeed() const override;
+  void SetSpeed(float speed) override;
   const std::vector<SDL_Point> &GetBody() const override;
 
  private:

@@ -1,6 +1,7 @@
 #include <snake.h>
 
 #include <iostream>
+
 #include "gtest/gtest.h"
 
 namespace SnakeTests {
@@ -18,7 +19,7 @@ class SnakeFixture : public ::testing::Test {
         snake(grid_width, grid_height) {}
 };
 
-TEST_F(SnakeFixture, PositionAfterConstructor) {
+TEST_F(SnakeFixture, SnakeIsInCenterOfGrid) {
   EXPECT_TRUE(snake.SnakeCell(grid_width / 2, grid_height / 2));
 }
 
@@ -37,12 +38,30 @@ TEST_F(SnakeFixture, ChangeDirectionAndUpdate) {
 
 TEST_F(SnakeFixture, GrowBodyWithUnitSpeedToRight) {
   snake.SetDirection(Direction::kRight);
-  snake.ChangeSpeed(0.9);
+  snake.SetSpeed(1.0);
   snake.GrowBody();
   snake.Update();
   EXPECT_NEAR(snake.GetHeadX(), grid_width / 2 + 1, 0.001);
   EXPECT_NEAR(snake.GetHeadY(), grid_height / 2, 0.001);
 }
+
+TEST_F(SnakeFixture, IsAliveOnInitialization) { EXPECT_TRUE(snake.IsAlive()); }
+
+TEST_F(SnakeFixture, DiesIfEatsItself) {
+  snake.SetSpeed(1.0);
+  for (int i = 0; i < 4; ++i) {
+    snake.GrowBody();
+    snake.Update();
+  }
+  EXPECT_EQ(snake.Size(), 5);
+  for (auto direction :
+       {Direction::kRight, Direction::kDown, Direction::kLeft}) {
+    snake.SetDirection(direction);
+    snake.Update();
+  }
+  EXPECT_FALSE(snake.IsAlive());
+}
+
 }  // namespace SnakeTests
 
 // TODO: Test Game

@@ -82,7 +82,7 @@ void Game::Update() {
     PlaceFood();
     // Grow snake and increase _speed.
     _snake->GrowBody();
-    _snake->ChangeSpeed(0.02);
+    _snake->SetSpeed(0.02f + _snake->GetSpeed());
   }
 }
 
