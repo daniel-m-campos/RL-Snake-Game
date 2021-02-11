@@ -3,11 +3,14 @@
 
 #include <vector>
 
-#include "SDL.h"
-
 namespace snake {
 
 enum class Direction { kUp, kDown, kLeft, kRight };
+
+struct Point {
+  int x;
+  int y;
+};
 
 class Snake {
  public:
@@ -23,7 +26,7 @@ class Snake {
   virtual float GetHeadY() const = 0;
   virtual float GetSpeed() const = 0;
   virtual void SetSpeed(float speed) = 0;
-  virtual const std::vector<SDL_Point> &GetBody() const = 0;
+  virtual const std::vector<Point> &GetBody() const = 0;
 };
 
 class GridSnake : public Snake {
@@ -45,11 +48,11 @@ class GridSnake : public Snake {
   float GetHeadY() const override;
   float GetSpeed() const override;
   void SetSpeed(float speed) override;
-  const std::vector<SDL_Point> &GetBody() const override;
+  const std::vector<Point> &GetBody() const override;
 
  private:
   void UpdateHead();
-  void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell);
+  void UpdateBody(Point &current_cell, Point &prev_cell);
 
   bool _growing{false};
   int _grid_width;
@@ -60,7 +63,7 @@ class GridSnake : public Snake {
   bool _alive{true};
   float _head_x;
   float _head_y;
-  std::vector<SDL_Point> _body;
+  std::vector<Point> _body;
 };
 }  // namespace snake
 #endif
