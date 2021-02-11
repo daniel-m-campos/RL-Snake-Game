@@ -8,4 +8,4 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(TEST test.cpp)
 target_include_directories(TEST PUBLIC ${SOURCES})
-target_link_libraries(TEST gtest gtest_main)
+target_link_libraries(TEST snake_game gtest gtest_main pthread)

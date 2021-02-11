@@ -17,7 +17,7 @@ include_directories(${SDL2_INCLUDE_DIRS})
 add_subdirectory(src)
 set(BUILD_TESTS NO CACHE BOOL "Build test target")
 if (BUILD_TESTS)
-    add_library(snake_game game.cpp snake.cpp)
+    add_library(snake_game src/game.cpp src/snake.cpp)
     add_subdirectory(tests)
 endif ()
 
