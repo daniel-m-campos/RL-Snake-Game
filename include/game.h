@@ -7,7 +7,11 @@
 #include "SDL.h"
 #include "controller.h"
 #include "renderer.h"
-#include "snake.h"
+
+namespace snake {
+class Snake;           // forward declaration
+enum class Direction;  // forward declaration
+}  // namespace snake
 
 class Game {
  public:

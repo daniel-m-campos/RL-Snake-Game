@@ -1,7 +1,10 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include "snake.h"
+namespace snake {
+class Snake;           // forward declaration
+enum class Direction;  // forward declaration
+}  // namespace snake
 
 class Controller {
  public:
