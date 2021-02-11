@@ -7,5 +7,4 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 add_executable(TEST test.cpp)
-target_include_directories(TEST PUBLIC ${SOURCES})
 target_link_libraries(TEST snake_game gtest gtest_main pthread)

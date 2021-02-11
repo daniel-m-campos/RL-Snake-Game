@@ -1,7 +1,9 @@
 #include <iostream>
+
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
+#include "snake.h"
 
 int main() {
   constexpr std::size_t kFramesPerSecond{60};
@@ -13,8 +15,11 @@ int main() {
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
   Controller controller;
-  Game game(kGridWidth, kGridHeight);
+  auto snake = std::make_unique<snake::GridSnake>(kGridWidth, kGridHeight);
+  Game game(kGridWidth, kGridHeight, std::move(snake));
+
   game.Run(controller, renderer, kMsPerFrame);
+
   std::cout << "Game has terminated successfully!\n";
   std::cout << "Score: " << game.GetScore() << "\n";
   std::cout << "Size: " << game.GetSize() << "\n";
