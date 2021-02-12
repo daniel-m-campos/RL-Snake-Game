@@ -1,8 +1,8 @@
-#include <snake.h>
-
 #include <iostream>
 
 #include "gtest/gtest.h"
+#include "policy.h"
+#include "snake.h"
 
 namespace SnakeTests {
 
@@ -63,6 +63,18 @@ TEST_F(SnakeFixture, DiesIfEatsItself) {
 }
 
 }  // namespace SnakeTests
+
+class MockPolicy : public Policy<int, int> {
+ public:
+  int operator()(int s) override { return -s; }
+};
+
+class PolicyFixture : public ::testing::Test {
+ public:
+  MockPolicy policy;
+};
+
+TEST_F(PolicyFixture, TestMockPolicy) { EXPECT_EQ(policy(1), -1); }
 
 // TODO: Test Game
 // TODO: Test controller
