@@ -4,14 +4,9 @@
 #include <memory>
 #include <random>
 
-#include "SDL.h"
 #include "controller.h"
 #include "renderer.h"
-
-namespace snake {
-class Snake;           // forward declaration
-enum class Direction;  // forward declaration
-}  // namespace snake
+#include "snake.h"
 
 class Game {
  public:
@@ -24,7 +19,7 @@ class Game {
 
  private:
   std::unique_ptr<snake::Snake> _snake;
-  SDL_Point _food;
+  snake::Point _food;
 
   std::random_device _dev;
   std::mt19937 _engine;
