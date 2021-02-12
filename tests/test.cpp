@@ -19,24 +19,24 @@ class SnakeFixture : public ::testing::Test {
         snake(grid_width, grid_height) {}
 };
 
-TEST_F(SnakeFixture, SnakeIsInCenterOfGrid) {
+TEST_F(SnakeFixture, TestSnakeIsInCenterOfGrid) {
   EXPECT_TRUE(snake.SnakeCell(grid_width / 2, grid_height / 2));
 }
 
-TEST_F(SnakeFixture, DefaultDirectionUpdate) {
+TEST_F(SnakeFixture, TestDefaultDirectionUpdate) {
   snake.Update();
   EXPECT_NEAR(snake.GetHeadX(), grid_width / 2, 0.001);
   EXPECT_NEAR(snake.GetHeadY(), grid_height / 2 - 0.1f, 0.001);
 }
 
-TEST_F(SnakeFixture, ChangeDirectionAndUpdate) {
+TEST_F(SnakeFixture, TestChangeDirectionAndUpdate) {
   snake.SetDirection(Direction::kRight);
   snake.Update();
   EXPECT_NEAR(snake.GetHeadX(), grid_width / 2 + 0.1f, 0.001);
   EXPECT_NEAR(snake.GetHeadY(), grid_height / 2, 0.001);
 }
 
-TEST_F(SnakeFixture, GrowBodyWithUnitSpeedToRight) {
+TEST_F(SnakeFixture, TestGrowBodyWithUnitSpeedToRight) {
   snake.SetDirection(Direction::kRight);
   snake.SetSpeed(1.0);
   snake.GrowBody();
@@ -45,9 +45,11 @@ TEST_F(SnakeFixture, GrowBodyWithUnitSpeedToRight) {
   EXPECT_NEAR(snake.GetHeadY(), grid_height / 2, 0.001);
 }
 
-TEST_F(SnakeFixture, IsAliveOnInitialization) { EXPECT_TRUE(snake.IsAlive()); }
+TEST_F(SnakeFixture, TestIsAliveOnInitialization) {
+  EXPECT_TRUE(snake.IsAlive());
+}
 
-TEST_F(SnakeFixture, DiesIfEatsItself) {
+TEST_F(SnakeFixture, TestDiesIfEatsItself) {
   snake.SetSpeed(1.0);
   for (int i = 0; i < 4; ++i) {
     snake.GrowBody();
@@ -66,7 +68,11 @@ TEST_F(SnakeFixture, DiesIfEatsItself) {
 
 class MockPolicy : public Policy<int, int> {
  public:
-  int operator()(int s) override { return -s; }
+  int operator()(int state) const override { return -state; }
+  double Probability(int action, int state) const override {
+    return action == -state;
+  }
+  double Value(int action, int state) const override { return 0; }
 };
 
 class PolicyFixture : public ::testing::Test {
@@ -74,7 +80,12 @@ class PolicyFixture : public ::testing::Test {
   MockPolicy policy;
 };
 
-TEST_F(PolicyFixture, TestMockPolicy) { EXPECT_EQ(policy(1), -1); }
+TEST_F(PolicyFixture, TestMockPolicyCall) { EXPECT_EQ(policy(1), -1); }
+
+TEST_F(PolicyFixture, TestMockPolicyProbability) {
+  EXPECT_DOUBLE_EQ(policy.Probability(1, 1), 0.0);
+  EXPECT_DOUBLE_EQ(policy.Probability(2, -2), 1.0);
+}
 
 // TODO: Test Game
 // TODO: Test controller
