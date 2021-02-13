@@ -72,11 +72,11 @@ double EpsilonGreedy<S, A>::Value(A action, S state) {
 
 template <typename S, typename A>
 A EpsilonGreedy<S, A>::operator()(S state) {
-  std::vector<A> greedy_actions = GreedyAction(state);
+  auto actions = GreedyAction(state);
   if (_uniform_dist(_engine) < _epsilon) {
-    std::shuffle(greedy_actions.begin(), greedy_actions.end(), _engine);
+    std::shuffle(actions.begin(), actions.end(), _engine);
   }
-  return greedy_actions[0];
+  return actions[0];
 }
 
 template <typename S, typename A>
@@ -91,22 +91,21 @@ size_t EpsilonGreedy<S, A>::ActionSize() const {
 
 template <typename S, typename A>
 std::vector<A> EpsilonGreedy<S, A>::GreedyAction(S state) {
-  std::vector<A> greedy_actions = GetActions(state);
+  auto actions = GetActions(state);
   std::sort(
-      greedy_actions.begin(), greedy_actions.end(),
-      [&](const auto& left, const auto& right) {
+      actions.begin(), actions.end(), [&](const auto& left, const auto& right) {
         return _action_values[{state, left}] > _action_values[{state, right}];
       });
-  const auto max_value = _action_values[{state, greedy_actions[0]}];
-  auto iter = greedy_actions.begin();
-  while (iter != greedy_actions.end()) {
+  const auto max_value = _action_values[{state, actions[0]}];
+  auto iter = actions.begin();
+  while (iter != actions.end()) {
     if (_action_values[{state, *iter}] != max_value) {
-      iter = greedy_actions.erase(iter);
+      iter = actions.erase(iter);
     } else {
       ++iter;
     }
   }
-  return greedy_actions;
+  return actions;
 }
 template <typename S, typename A>
 std::vector<A> EpsilonGreedy<S, A>::GetActions(const S& state) {
