@@ -129,11 +129,20 @@ class EpsilonGreedyUniqueGreedyActionPerStateFixture : public ::testing::Test {
       {{0, 0}, 0}, {{0, 1}, 1}, {{1, 1}, 0},
       {{1, 3}, 1}, {{2, 2}, 0}, {{2, 4}, 1},
   };
+  EpsilonGreedy<int, int> create_policy(double epsilon) {
+    EpsilonGreedy<int, int> policy{state_actions, epsilon};
+    for (const auto& [state, actions] : state_actions) {
+      for (const auto& action : actions) {
+        policy.SetValue(state, action, action_values[{state, action}]);
+      }
+    }
+    return policy;
+  }
 };
 
 TEST_F(EpsilonGreedyUniqueGreedyActionPerStateFixture,
        TestZeroEpsilonReturnGreedyAction) {
-  EpsilonGreedy<int, int> policy{state_actions, action_values, 0.0};
+  auto policy = create_policy(0.0);
   EXPECT_EQ(policy(0), 1);
   EXPECT_EQ(policy(1), 3);
   EXPECT_EQ(policy(2), 4);
@@ -144,14 +153,14 @@ TEST_F(EpsilonGreedyUniqueGreedyActionPerStateFixture,
   auto state = 0;
   auto epsilon = 0.1;
   auto N = state_actions[state].size();
-  EpsilonGreedy<int, int> policy{state_actions, action_values, epsilon};
+  auto policy = create_policy(epsilon);
   EXPECT_EQ(policy.Probability(0, state), epsilon * 1 / N);
   EXPECT_EQ(policy.Probability(1, state), epsilon * 1 / N + (1 - epsilon) * 1);
 }
 
 TEST_F(EpsilonGreedyUniqueGreedyActionPerStateFixture,
        TestValueWithSingleGreedyAction) {
-  EpsilonGreedy<int, int> policy{state_actions, action_values, 0.1};
+  auto policy = create_policy(0.1);
   for (const auto& [key, value] : action_values) {
     auto [state, action] = key;
     EXPECT_EQ(policy.GetValue(state, action), value);
@@ -159,7 +168,7 @@ TEST_F(EpsilonGreedyUniqueGreedyActionPerStateFixture,
 }
 
 TEST_F(EpsilonGreedyUniqueGreedyActionPerStateFixture, TestSetValues) {
-  EpsilonGreedy<int, int> policy{state_actions, action_values, 0.1};
+  auto policy = create_policy(0.1);
   double new_value = 42.0;
   for (const auto& [key, value] : action_values) {
     auto [state, action] = key;

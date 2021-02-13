@@ -24,20 +24,7 @@ template <typename S, typename A>
 EpsilonGreedy<S, A>::EpsilonGreedy(
     EpsilonGreedy::state_action_map state_actions, double epsilon)
     : _epsilon(epsilon),
-      _state_actions(state_actions),
-      _uniform_dist(std::uniform_real_distribution<>(0, 1)),
-      _engine(std::random_device()()) {
-  CacheActions();
-  _num_actions = _actions.size();
-}
-
-template <typename S, typename A>
-EpsilonGreedy<S, A>::EpsilonGreedy(
-    EpsilonGreedy::state_action_map state_actions,
-    EpsilonGreedy::action_value_map action_values, double epsilon)
-    : _epsilon(epsilon),
       _num_states(state_actions.size()),
-      _action_values(action_values),
       _state_actions(state_actions),
       _uniform_dist(std::uniform_real_distribution<>(0, 1)),
       _engine(std::random_device()()) {

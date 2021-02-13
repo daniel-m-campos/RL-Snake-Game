@@ -23,11 +23,9 @@ template <typename S, typename A>
 class EpsilonGreedy : public Policy<S, A> {
  public:
   using state_action_map = std::unordered_map<S, std::vector<A>>;
-  using action_value_map = std::unordered_map<std::pair<S, A>, double>;
+
   EpsilonGreedy(size_t num_states, size_t num_actions, double epsilon);
   EpsilonGreedy(state_action_map state_actions, double epsilon);
-  EpsilonGreedy(state_action_map state_actions, action_value_map action_values,
-                double epsilon);
   A operator()(S state) override;
   double Probability(A action, S given_state) override;
   double GetValue(S state, A action) override;
@@ -36,6 +34,8 @@ class EpsilonGreedy : public Policy<S, A> {
   size_t ActionSize() const override;
 
  private:
+  using action_value_map = std::unordered_map<std::pair<S, A>, double>;
+
   double _epsilon;
   size_t _num_states;
   size_t _num_actions;
