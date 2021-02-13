@@ -106,7 +106,8 @@ TEST_F(EpsilonGreedyZeroValueFunctionFixture, TestInitializedValue) {
 TEST_F(EpsilonGreedyZeroValueFunctionFixture, TestInitializedProbability) {
   for (int action = 0; action < policy.ActionSize(); ++action) {
     for (int state = 0; state < policy.StateSize(); ++state) {
-      EXPECT_DOUBLE_EQ(policy.Probability(action, state), 1 / epsilon);
+      EXPECT_NEAR(policy.Probability(action, state), 1.0 / policy.ActionSize(),
+                  1e-6);
     }
   }
 }
@@ -135,7 +136,16 @@ TEST_F(EpsilonGreedyUniqueGreedyActionPerStateFixture,
   EXPECT_EQ(policy(0), 1);
   EXPECT_EQ(policy(1), 3);
   EXPECT_EQ(policy(2), 4);
+}
 
+TEST_F(EpsilonGreedyUniqueGreedyActionPerStateFixture,
+       TestProbabilityWithSingleGreedyAction) {
+  auto state = 0;
+  auto epsilon = 0.1;
+  auto N = state_actions[state].size();
+  EpsilonGreedy<int, int> policy{state_actions, action_values, epsilon};
+  EXPECT_EQ(policy.Probability(0, state), epsilon * 1 / N);
+  EXPECT_EQ(policy.Probability(1, state), epsilon * 1 / N + (1 - epsilon) * 1);
 }
 
 // TODO: Test Game

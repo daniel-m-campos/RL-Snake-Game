@@ -56,8 +56,13 @@ void EpsilonGreedy<S, A>::CacheActions() {
 
 template <typename S, typename A>
 double EpsilonGreedy<S, A>::Probability(A action, S state) {
-  // FIXME: This needs to account for the GreedyAction
-  return 1 / _epsilon;
+  auto actions = GreedyAction(state);
+  double num_actions = _state_actions[state].size();
+  if (std::find(actions.begin(), actions.end(), action) != actions.end()) {
+    return _epsilon / num_actions + (1 - _epsilon) / actions.size();
+  } else {
+    return _epsilon / num_actions;
+  }
 }
 
 template <typename S, typename A>
