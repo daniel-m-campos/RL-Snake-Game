@@ -66,8 +66,8 @@ double EpsilonGreedy<S, A>::Probability(A action, S state) {
 }
 
 template <typename S, typename A>
-double EpsilonGreedy<S, A>::Value(A action, S state) {
-  return _action_values[{action, state}];
+double EpsilonGreedy<S, A>::Value(S state, A action) {
+  return _action_values[{state, action}];
 }
 
 template <typename S, typename A>

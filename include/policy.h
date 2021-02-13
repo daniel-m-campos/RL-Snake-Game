@@ -13,7 +13,7 @@ class Policy {
   virtual ~Policy() = default;
   virtual A operator()(S) = 0;
   virtual double Probability(A, S) = 0;
-  virtual double Value(A, S) = 0;
+  virtual double Value(S, A) = 0;
   virtual size_t StateSize() const = 0;
   virtual size_t ActionSize() const = 0;
 };
@@ -29,7 +29,7 @@ class EpsilonGreedy : public Policy<S, A> {
                 double epsilon);
   A operator()(S state) override;
   double Probability(A action, S given_state) override;
-  double Value(A action, S state) override;
+  double Value(S state, A action) override;
   size_t StateSize() const override;
   size_t ActionSize() const override;
 

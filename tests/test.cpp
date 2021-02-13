@@ -72,7 +72,7 @@ class MockPolicy : public Policy<int, int> {
   double Probability(int action, int state) override {
     return action == -state;
   }
-  double Value(int action, int state) override { return 0; }
+  double Value(int state, int action) override { return 0; }
   size_t StateSize() const override { return std::numeric_limits<int>::max(); }
   size_t ActionSize() const override { return std::numeric_limits<int>::max(); }
 };
@@ -146,6 +146,12 @@ TEST_F(EpsilonGreedyUniqueGreedyActionPerStateFixture,
   EpsilonGreedy<int, int> policy{state_actions, action_values, epsilon};
   EXPECT_EQ(policy.Probability(0, state), epsilon * 1 / N);
   EXPECT_EQ(policy.Probability(1, state), epsilon * 1 / N + (1 - epsilon) * 1);
+}
+
+TEST_F(EpsilonGreedyUniqueGreedyActionPerStateFixture,
+       TestValueWithSingleGreedyAction) {
+  EpsilonGreedy<int, int> policy{state_actions, action_values, 0.1};
+
 }
 
 // TODO: Test Game
