@@ -151,7 +151,10 @@ TEST_F(EpsilonGreedyUniqueGreedyActionPerStateFixture,
 TEST_F(EpsilonGreedyUniqueGreedyActionPerStateFixture,
        TestValueWithSingleGreedyAction) {
   EpsilonGreedy<int, int> policy{state_actions, action_values, 0.1};
-
+  for (const auto& [key, value] : action_values) {
+    auto [state, action] = key;
+    EXPECT_EQ(policy.Value(state, action), value);
+  }
 }
 
 // TODO: Test Game
