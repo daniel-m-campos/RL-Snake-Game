@@ -66,7 +66,7 @@ double EpsilonGreedy<S, A>::Probability(A action, S state) {
 }
 
 template <typename S, typename A>
-double EpsilonGreedy<S, A>::Value(S state, A action) {
+double EpsilonGreedy<S, A>::GetValue(S state, A action) {
   return _action_values[{state, action}];
 }
 
@@ -110,6 +110,7 @@ std::vector<A> EpsilonGreedy<S, A>::GreedyAction(S state) {
   }
   return actions;
 }
+
 template <typename S, typename A>
 std::vector<A> EpsilonGreedy<S, A>::GetActions(const S& state) {
   std::vector<A> greedy_actions;
@@ -118,6 +119,11 @@ std::vector<A> EpsilonGreedy<S, A>::GetActions(const S& state) {
     greedy_actions.push_back(action);
   }
   return greedy_actions;
+}
+
+template <typename S, typename A>
+void EpsilonGreedy<S, A>::SetValue(S state, A action, double value) {
+  _action_values[{state, action}] = value;
 }
 
 template class EpsilonGreedy<int, int>;

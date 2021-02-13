@@ -72,7 +72,8 @@ class MockPolicy : public Policy<int, int> {
   double Probability(int action, int state) override {
     return action == -state;
   }
-  double Value(int state, int action) override { return 0; }
+  double GetValue(int state, int action) override { return 0; }
+  void SetValue(int state, int action, double value) override {}
   size_t StateSize() const override { return std::numeric_limits<int>::max(); }
   size_t ActionSize() const override { return std::numeric_limits<int>::max(); }
 };
@@ -98,7 +99,7 @@ class EpsilonGreedyZeroValueFunctionFixture : public ::testing::Test {
 TEST_F(EpsilonGreedyZeroValueFunctionFixture, TestInitializedValue) {
   for (int action = 0; action < policy.ActionSize(); ++action) {
     for (int state = 0; state < policy.StateSize(); ++state) {
-      EXPECT_DOUBLE_EQ(policy.Value(action, state), 0.0);
+      EXPECT_DOUBLE_EQ(policy.GetValue(action, state), 0.0);
     }
   }
 }
@@ -153,7 +154,18 @@ TEST_F(EpsilonGreedyUniqueGreedyActionPerStateFixture,
   EpsilonGreedy<int, int> policy{state_actions, action_values, 0.1};
   for (const auto& [key, value] : action_values) {
     auto [state, action] = key;
-    EXPECT_EQ(policy.Value(state, action), value);
+    EXPECT_EQ(policy.GetValue(state, action), value);
+  }
+}
+
+TEST_F(EpsilonGreedyUniqueGreedyActionPerStateFixture, TestSetValues) {
+  EpsilonGreedy<int, int> policy{state_actions, action_values, 0.1};
+  double new_value = 42.0;
+  for (const auto& [key, value] : action_values) {
+    auto [state, action] = key;
+    policy.SetValue(state, action, new_value);
+    EXPECT_EQ(policy.GetValue(state, action), new_value);
+    ++new_value;
   }
 }
 
