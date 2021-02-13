@@ -72,10 +72,13 @@ double EpsilonGreedy<S, A>::Value(A action, S state) {
 
 template <typename S, typename A>
 A EpsilonGreedy<S, A>::operator()(S state) {
-  auto actions = GreedyAction(state);
+  std::vector<A> actions;
   if (_uniform_dist(_engine) < _epsilon) {
-    std::shuffle(actions.begin(), actions.end(), _engine);
+    actions = _state_actions[state];
+  } else {
+    actions = GreedyAction(state);
   }
+  std::shuffle(actions.begin(), actions.end(), _engine);
   return actions[0];
 }
 
