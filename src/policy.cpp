@@ -67,7 +67,7 @@ double EpsilonGreedy<S, A>::Probability(A action, S state) {
 
 template <typename S, typename A>
 double EpsilonGreedy<S, A>::Value(A action, S state) {
-  return 0;
+  return _action_values[{action, state}];
 }
 
 template <typename S, typename A>
@@ -92,16 +92,15 @@ size_t EpsilonGreedy<S, A>::ActionSize() const {
 template <typename S, typename A>
 std::vector<A> EpsilonGreedy<S, A>::GreedyAction(S state) {
   std::vector<A> greedy_actions = GetActions(state);
-  std::sort(greedy_actions.begin(), greedy_actions.end(),
-            [&](auto& left, auto& right) {
-              return _action_values[std::make_pair(state, left)] >
-                     _action_values[std::make_pair(state, right)];
-            });
-  const auto max_value =
-      _action_values[std::make_pair(state, greedy_actions[0])];
+  std::sort(
+      greedy_actions.begin(), greedy_actions.end(),
+      [&](const auto& left, const auto& right) {
+        return _action_values[{state, left}] > _action_values[{state, right}];
+      });
+  const auto max_value = _action_values[{state, greedy_actions[0]}];
   auto iter = greedy_actions.begin();
   while (iter != greedy_actions.end()) {
-    if (_action_values[std::make_pair(state, *iter)] != max_value) {
+    if (_action_values[{state, *iter}] != max_value) {
       iter = greedy_actions.erase(iter);
     } else {
       ++iter;
