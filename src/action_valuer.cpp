@@ -16,7 +16,12 @@ SimpleActionValuer<S, A>::SimpleActionValuer(
 template <typename S, typename A>
 SimpleActionValuer<S, A>::SimpleActionValuer(
     SimpleActionValuer::action_value_map action_value_map)
-    : _action_value_map(action_value_map) {}
+    : _action_value_map(action_value_map) {
+  for (const auto& [key, value] : _action_value_map) {
+    auto [state, action] = key;
+    _state_actions[state].push_back(action);
+  }
+}
 
 template <typename S, typename A>
 std::vector<A> SimpleActionValuer<S, A>::ArgMax(S state) {

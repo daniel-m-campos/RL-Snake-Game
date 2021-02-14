@@ -56,4 +56,6 @@ TEST_F(SimpleActionValuerFixture, TestActionValueMapConstructor) {
       EXPECT_EQ(action_valuer.GetValue(state, action), actual_value);
     }
   }
+  EXPECT_FALSE(action_valuer.GetStates().empty());
+  EXPECT_FALSE(action_valuer.GetActions(0).empty());
 }
