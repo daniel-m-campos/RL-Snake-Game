@@ -23,6 +23,7 @@ if (BUILD_TESTS)
             src/snake.cpp
             src/policy.cpp
             src/action_valuer.cpp
+            src/learner.cpp
     )
     add_subdirectory(tests)
 endif ()
