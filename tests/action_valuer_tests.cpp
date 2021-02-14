@@ -9,6 +9,10 @@ class SimpleActionValuerFixture : public ::testing::Test {
       {2, {2, 4}},
   };
   std::vector<int> states{0, 1, 2};
+  std::unordered_map<std::pair<int, int>, double> action_value_map{
+      {{0, 0}, 0}, {{0, 1}, 1}, {{1, 1}, 0},
+      {{1, 3}, 1}, {{2, 2}, 0}, {{2, 4}, 1},
+  };
 };
 
 TEST_F(SimpleActionValuerFixture, TestInitValue) {
@@ -41,5 +45,15 @@ TEST_F(SimpleActionValuerFixture, TestArgMax) {
   auto state = 2;
   auto action = 4;
   action_valuer.SetValue(state, action, 10.0);
-  EXPECT_EQ(action_valuer.ArgMax(state), action);
+  EXPECT_EQ(action_valuer.ArgMax(state), std::vector{action});
+}
+
+TEST_F(SimpleActionValuerFixture, TestActionValueMapConstructor) {
+  SimpleActionValuer action_valuer{action_value_map};
+  for (const auto& state : action_valuer.GetStates()) {
+    for (const auto& action : action_valuer.GetActions(state)) {
+      auto actual_value = action_value_map[{state, action}];
+      EXPECT_EQ(action_valuer.GetValue(state, action), actual_value);
+    }
+  }
 }
