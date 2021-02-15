@@ -30,7 +30,7 @@ template <typename S, typename A>
 A EpsilonGreedy<S, A>::operator()(S state) {
   std::vector<A> actions;
   if (_uniform_dist(_engine) < _epsilon) {
-    actions = _action_valuer->GetStates();
+    actions = _action_valuer->GetActions(state);
   } else {
     actions = _action_valuer->ArgMax(state);
   }
