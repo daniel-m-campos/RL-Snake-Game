@@ -13,6 +13,4 @@ class MockPolicy : public Policy<S, A> {
   MOCK_METHOD(double, Probability, (A action, S given_state), (override));
 };
 
-
-
 #endif  // RLSNAKEGAME_MOCK_POLICY_H
