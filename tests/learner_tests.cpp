@@ -1,26 +1,10 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include "learner.h"
+#include "mock_action_valuer.h"
+#include "mock_policy.h"
 
 using ::testing::Return;
-
-template <typename S, typename A>
-class MockPolicy : public Policy<S, A> {
- public:
-  MOCK_METHOD(A, ParentheisesOp, (S state));
-  A operator()(S state) override { return ParentheisesOp(state); }
-  MOCK_METHOD(double, Probability, (A action, S given_state), (override));
-};
-
-template <typename S, typename A>
-class MockActionValuer : public ActionValuer<S, A> {
- public:
-  MOCK_METHOD(double, GetValue, (S state, A action), (override));
-  MOCK_METHOD(void, SetValue, (S state, A action, double value), (override));
-  MOCK_METHOD(std::vector<A>, ArgMax, (S state), (override));
-  MOCK_METHOD(std::vector<S>, GetStates, (), (override));
-  MOCK_METHOD(std::vector<A>, GetActions, (S state), (override));
-};
 
 TEST(LearnerTest, TestInstanitateMockPolicy) { MockPolicy<int, int> policy; }
 
