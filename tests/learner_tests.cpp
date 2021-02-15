@@ -31,6 +31,6 @@ TEST(QLearnerTest, TestPolicyUpdatedWithUniqueGreedyAction) {
                            (reward + discount_factor * greedy_value - value)))
       .WillOnce(Return());
 
-  QLearner<int, int, double> learner{discount_factor, step_size};
+  QLearner<int, int> learner{discount_factor, step_size};
   learner.Reinforce(policy, valuer, state, action, reward, new_state);
 }

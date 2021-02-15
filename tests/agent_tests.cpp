@@ -10,11 +10,11 @@
 using ::testing::_;
 using ::testing::Return;
 
-template <typename S, typename A, typename R>
-class MockLearner : public Learner<S, A, R> {
+template <typename S, typename A>
+class MockLearner : public Learner<S, A> {
  public:
   MOCK_METHOD(void, Reinforce,
-              ((const Policy<S, A>&), (ActionValuer<S, A>&), S, A, R, S),
+              ((const Policy<S, A>&), (ActionValuer<S, A>&), S, A, double, S),
               (override));
 };
 
@@ -24,8 +24,8 @@ class AgentImplFixture : public ::testing::Test {
       std::make_shared<MockActionValuer<int, int>>();
   std::unique_ptr<MockPolicy<int, int>> policy_ptr =
       std::make_unique<MockPolicy<int, int>>();
-  std::unique_ptr<MockLearner<int, int, double>> learner_ptr =
-      std::make_unique<MockLearner<int, int, double>>();
+  std::unique_ptr<MockLearner<int, int>> learner_ptr =
+      std::make_unique<MockLearner<int, int>>();
 };
 
 TEST_F(AgentImplFixture, TestUpdate) {
@@ -37,8 +37,8 @@ TEST_F(AgentImplFixture, TestUpdate) {
   EXPECT_CALL(*learner_ptr.get(),
               Reinforce(_, _, state, action, reward, new_state))
       .WillOnce(Return());
-  AgentImpl<int, int, double> agent{valuer_ptr, std::move(policy_ptr),
-                                    std::move(learner_ptr), state, action};
+  AgentImpl<int, int> agent{valuer_ptr, std::move(policy_ptr),
+                            std::move(learner_ptr), state, action};
   agent.Update(new_state, reward);
 }
 
@@ -50,7 +50,7 @@ TEST_F(AgentImplFixture, TestGetAction) {
 
   EXPECT_CALL(*policy_ptr.get(), ParentheisesOp(new_state))
       .WillOnce(Return(new_action));
-  AgentImpl<int, int, double> agent{valuer_ptr, std::move(policy_ptr),
-                                    std::move(learner_ptr), state, action};
+  AgentImpl<int, int> agent{valuer_ptr, std::move(policy_ptr),
+                            std::move(learner_ptr), state, action};
   EXPECT_EQ(agent.GetAction(new_state), new_action);
 }
