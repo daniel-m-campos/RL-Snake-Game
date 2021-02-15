@@ -1,7 +1,7 @@
 #include "rl_factory.h"
 
 template <typename S, typename A>
-std::unique_ptr<Agent<S, A>> RLFactory<S, A>::create_q_agent(
+std::unique_ptr<Agent<S, A>> RLFactory<S, A>::CreateQAgent(
     std::unordered_map<S, std::vector<A>> state_action_map, double epsilon,
     double discount_factor, double step_size, S initial_state,
     A initial_action) {
