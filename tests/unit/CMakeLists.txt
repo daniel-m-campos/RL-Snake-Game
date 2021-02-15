@@ -1,11 +1,3 @@
-include(FetchContent)
-FetchContent_Declare(
-        googletest
-        GIT_REPOSITORY https://github.com/google/googletest.git
-        GIT_TAG release-1.10.0
-)
-FetchContent_MakeAvailable(googletest)
-
 add_executable(
         UNITTEST
         test.cpp
@@ -17,4 +9,12 @@ add_executable(
         rl_factory_tests.cpp
 )
 
-target_link_libraries(UNITTEST snake_game gtest gmock gtest_main pthread)
+target_link_libraries(
+        UNITTEST
+        snake_game
+        reinforcement_learning
+        gtest
+        gmock
+        gtest_main
+        pthread
+)

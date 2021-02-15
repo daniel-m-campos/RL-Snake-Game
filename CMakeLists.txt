@@ -21,12 +21,16 @@ if (BUILD_TESTS)
             snake_game
             src/game.cpp
             src/snake.cpp
+    )
+    add_library(
+            reinforcement_learning
             src/policy.cpp
             src/action_valuer.cpp
             src/learner.cpp
             src/agent.cpp
             src/rl_factory.cpp
     )
+    add_subdirectory(tests)
     add_subdirectory(tests/unit)
 endif ()
 
