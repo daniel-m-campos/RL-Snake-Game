@@ -22,7 +22,7 @@ class EpsilonGreedy : public Policy<S, A> {
  public:
   using state_action_map = std::unordered_map<S, std::vector<A>>;
 
-  EpsilonGreedy(std::unique_ptr<ActionValuer<S, A>> _action_valuer,
+  EpsilonGreedy(std::shared_ptr<ActionValuer<S, A>> _action_valuer,
                 double epsilon);
   EpsilonGreedy(state_action_map state_actions, double epsilon);
   A operator()(S state) override;
@@ -30,7 +30,7 @@ class EpsilonGreedy : public Policy<S, A> {
 
  private:
   double _epsilon;
-  std::unique_ptr<ActionValuer<S, A>> _action_valuer;
+  std::shared_ptr<ActionValuer<S, A>> _action_valuer;
   std::mt19937_64 _engine;
   std::uniform_real_distribution<> _uniform_dist;
 };
