@@ -27,7 +27,7 @@ if (BUILD_TESTS)
             src/agent.cpp
             src/rl_factory.cpp
     )
-    add_subdirectory(tests)
+    add_subdirectory(tests/unit)
 endif ()
 
 add_executable(RLSnakeGame ${SOURCES})
