@@ -22,6 +22,7 @@ class EpsilonGreedy : public Policy<S, A> {
  public:
   using state_action_map = std::unordered_map<S, std::vector<A>>;
 
+  EpsilonGreedy() = delete;
   EpsilonGreedy(std::shared_ptr<ActionValuer<S, A>> _action_valuer,
                 double epsilon);
   EpsilonGreedy(state_action_map state_actions, double epsilon);

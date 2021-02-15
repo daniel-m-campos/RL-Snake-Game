@@ -23,6 +23,7 @@ class SimpleActionValuer : public ActionValuer<S, A> {
   using state_action_map = std::unordered_map<S, std::vector<A>>;
   using action_value_map = std::unordered_map<std::pair<S, A>, double>;
 
+  SimpleActionValuer() = delete;
   explicit SimpleActionValuer(action_value_map action_value_map);
   explicit SimpleActionValuer(state_action_map state_action_map,
                               double init_value = 0);

@@ -14,6 +14,7 @@ class Learner {
 template <typename S, typename A, typename R>
 class QLearner : public Learner<S, A, R> {
  public:
+  QLearner() = delete;
   QLearner(double discount_factor, double step_size);
   void Reinforce(const Policy<S, A>& policy, ActionValuer<S, A>& valuer,
                  S state, A action, R reward, S new_state) override;
