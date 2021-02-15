@@ -24,6 +24,8 @@ if (BUILD_TESTS)
             src/policy.cpp
             src/action_valuer.cpp
             src/learner.cpp
+            src/agent.cpp
+            src/rl_factory.cpp
     )
     add_subdirectory(tests)
 endif ()

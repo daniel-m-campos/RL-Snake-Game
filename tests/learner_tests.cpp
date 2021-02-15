@@ -6,8 +6,6 @@
 
 using ::testing::Return;
 
-TEST(LearnerTest, TestInstanitateMockPolicy) { MockPolicy<int, int> policy; }
-
 TEST(QLearnerTest, TestPolicyUpdatedWithUniqueGreedyAction) {
   auto state = 0;
   auto action = 0;
