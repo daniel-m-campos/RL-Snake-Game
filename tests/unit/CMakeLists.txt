@@ -1,5 +1,5 @@
 add_executable(
-        UNITTEST
+        UNIT_TEST
         test.cpp
         snake_tests.cpp
         policy_tests.cpp
@@ -10,7 +10,7 @@ add_executable(
 )
 
 target_link_libraries(
-        UNITTEST
+        UNIT_TEST
         snake_game
         reinforcement_learning
         gtest
