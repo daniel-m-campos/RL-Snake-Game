@@ -32,6 +32,7 @@ if (BUILD_TESTS)
     )
     add_subdirectory(tests)
     add_subdirectory(tests/unit)
+    add_subdirectory(tests/integration)
 endif ()
 
 add_executable(RLSnakeGame ${SOURCES})
