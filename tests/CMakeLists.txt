@@ -14,6 +14,7 @@ add_executable(
         action_valuer_tests.cpp
         learner_tests.cpp
         agent_tests.cpp
+        rl_factory_tests.cpp
 )
 
 target_link_libraries(TEST snake_game gtest gmock gtest_main pthread)
