@@ -5,7 +5,7 @@
 template <typename S, typename A>
 EpsilonGreedy<S, A>::EpsilonGreedy(
     std::shared_ptr<ActionValuer<S, A>> action_valuer, double epsilon)
-    : _epsilon(epsilon), _action_valuer(std::move(action_valuer)) {}
+    : _epsilon(epsilon), _action_valuer(action_valuer) {}
 
 template <typename S, typename A>
 EpsilonGreedy<S, A>::EpsilonGreedy(
