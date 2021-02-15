@@ -7,7 +7,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 add_executable(
-        TEST
+        UNITTEST
         test.cpp
         snake_tests.cpp
         policy_tests.cpp
@@ -17,4 +17,4 @@ add_executable(
         rl_factory_tests.cpp
 )
 
-target_link_libraries(TEST snake_game gtest gmock gtest_main pthread)
+target_link_libraries(UNITTEST snake_game gtest gmock gtest_main pthread)
