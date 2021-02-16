@@ -28,7 +28,7 @@ void PrintAction(Position& state, Move& action) {
 }
 
 void Print(ActionValuer<Position, Move>* valuer, bool values) {
-  std::cout << std::setprecision(4);
+  std::cout << std::setprecision(3);
   for (int y = 4; y >= 0; --y) {
     for (int x = 0; x < 5; ++x) {
       Position state{x, y};
