@@ -70,6 +70,7 @@ TEST(TestGridWorldSimulation, TestSimulationLoop) {
       {{2, 4}, Move::kWest},
       {{3, 3}, Move::kWest},
       {{4, 3}, Move::kWest},
+      {{4, 4}, Move::kWest},
   }};
 
   for (const auto& [state, expected_action] : optimal_policy) {
