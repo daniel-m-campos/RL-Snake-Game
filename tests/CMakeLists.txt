@@ -5,6 +5,3 @@ FetchContent_Declare(
         GIT_TAG release-1.10.0
 )
 FetchContent_MakeAvailable(googletest)
-
-add_executable(TEST test.cpp)
-target_link_libraries(TEST snake_game gtest gtest_main pthread)

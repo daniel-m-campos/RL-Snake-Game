@@ -1,0 +1,20 @@
+add_executable(
+        UNIT_TEST
+        test.cpp
+        snake_tests.cpp
+        policy_tests.cpp
+        action_valuer_tests.cpp
+        learner_tests.cpp
+        agent_tests.cpp
+        rl_factory_tests.cpp
+)
+
+target_link_libraries(
+        UNIT_TEST
+        snake_game
+        reinforcement_learning
+        gtest
+        gmock
+        gtest_main
+        pthread
+)
