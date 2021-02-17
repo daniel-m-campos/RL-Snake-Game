@@ -1,6 +1,7 @@
 #include "snake.h"
 
 #include <cmath>
+#include <tuple>
 
 using namespace snake;
 
@@ -97,3 +98,9 @@ const std::vector<Point> &GridSnake::GetBody() const { return _body; }
 float GridSnake::GetSpeed() const { return _speed; }
 
 void GridSnake::SetSpeed(float speed) { _speed = speed; }
+
+bool Point::operator==(const Point &rhs) const {
+  return std::tie(x, y) == std::tie(rhs.x, rhs.y);
+}
+
+bool Point::operator!=(const Point &rhs) const { return !(rhs == *this); }

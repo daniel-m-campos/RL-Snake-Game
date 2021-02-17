@@ -5,6 +5,7 @@
 #include <random>
 
 #include "controller.h"
+#include "food.h"
 #include "renderer.h"
 #include "snake.h"
 
@@ -18,17 +19,10 @@ class Game {
   int GetSize() const;
 
  private:
-  std::unique_ptr<snake::Snake> _snake;
-  snake::Point _food;
-
-  std::random_device _dev;
-  std::mt19937 _engine;
-  std::uniform_int_distribution<int> _random_w;
-  std::uniform_int_distribution<int> _random_h;
-
   int _score{0};
+  std::unique_ptr<snake::Snake> _snake;
+  Food _food;
 
-  void PlaceFood();
   void Update();
 };
 

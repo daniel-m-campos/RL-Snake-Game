@@ -21,6 +21,7 @@ if (BUILD_TESTS)
             snake_game
             src/game.cpp
             src/snake.cpp
+            src/food.cpp
     )
     add_library(
             reinforcement_learning
