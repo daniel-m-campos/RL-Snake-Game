@@ -7,7 +7,7 @@
 
 class Food {
  public:
-  Food() = default;
+  Food() = delete;
   Food(std::size_t grid_width, std::size_t grid_height);
   Food(std::size_t grid_width, std::size_t grid_height,
        snake::Point init_location);
