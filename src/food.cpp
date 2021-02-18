@@ -4,8 +4,8 @@
 
 Food::Food(std::size_t grid_width, std::size_t grid_height)
     : _engine{(_dev())},
-      _random_w{0, static_cast<int>(grid_width)},
-      _random_h{0, static_cast<int>(grid_height)} {
+      _random_w{0, static_cast<int>(grid_width) - 1},
+      _random_h{0, static_cast<int>(grid_height) - 1} {
   _location = SampleLocation();
 }
 
