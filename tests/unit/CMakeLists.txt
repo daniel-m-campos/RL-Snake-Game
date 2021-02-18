@@ -8,6 +8,7 @@ add_executable(
         agent_tests.cpp
         rl_factory_tests.cpp
         food_tests.cpp
+        game_environment_test.cpp
 )
 
 target_link_libraries(
