@@ -1,17 +1,27 @@
 #ifndef SNAKE_H
 #define SNAKE_H
 
+#include <tuple>
 #include <vector>
 
 namespace snake {
 
 enum class Direction { kUp, kDown, kLeft, kRight };
 
+template <typename T>
 struct Point {
-  int x;
-  int y;
-  bool operator==(const Point &rhs) const;
-  bool operator!=(const Point &rhs) const;
+  T x;
+  T y;
+  bool operator==(const Point &rhs) const {
+    return std::tie(x, y) == std::tie(rhs.x, rhs.y);
+  }
+  bool operator!=(const Point &rhs) const { return rhs != *this; }
+  bool operator<(const Point &rhs) const {
+    return std::tie(x, y) < std::tie(rhs.x, rhs.y);
+  }
+  bool operator>(const Point &rhs) const { return rhs < *this; }
+  bool operator<=(const Point &rhs) const { return rhs >= *this; }
+  bool operator>=(const Point &rhs) const { return *this >= rhs; }
 };
 
 class Snake {
@@ -28,7 +38,7 @@ class Snake {
   virtual float GetHeadY() const = 0;
   virtual float GetSpeed() const = 0;
   virtual void SetSpeed(float speed) = 0;
-  virtual const std::vector<Point> &GetBody() const = 0;
+  virtual const std::vector<Point<int>> &GetBody() const = 0;
 };
 
 class GridSnake : public Snake {
@@ -50,11 +60,11 @@ class GridSnake : public Snake {
   float GetHeadY() const override;
   float GetSpeed() const override;
   void SetSpeed(float speed) override;
-  const std::vector<Point> &GetBody() const override;
+  const std::vector<Point<int>> &GetBody() const override;
 
  private:
   void UpdateHead();
-  void UpdateBody(Point &current_cell, Point &prev_cell);
+  void UpdateBody(Point<int> &current_cell, Point<int> &prev_cell);
 
   bool _growing{false};
   int _grid_width;
@@ -65,7 +75,7 @@ class GridSnake : public Snake {
   bool _alive{true};
   float _head_x;
   float _head_y;
-  std::vector<Point> _body;
+  std::vector<Point<int>> _body;
 };
 }  // namespace snake
 #endif

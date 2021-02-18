@@ -10,13 +10,13 @@ Food::Food(std::size_t grid_width, std::size_t grid_height)
 }
 
 Food::Food(std::size_t grid_width, std::size_t grid_height,
-           snake::Point init_location)
+           snake::Point<int> init_location)
     : _location{init_location},
       _engine{(_dev())},
       _random_w{(0, static_cast<int>(grid_width))},
       _random_h{(0, static_cast<int>(grid_height))} {}
 
-const snake::Point& Food::GetLocation() const { return _location; }
+const snake::Point<int>& Food::GetLocation() const { return _location; }
 
 bool Food::TryFeed(snake::Snake* snake) {
   int new_x = static_cast<int>(snake->GetHeadX());
@@ -39,6 +39,6 @@ void Food::PlaceFood(snake::Snake* snake) {
   }
 }
 
-snake::Point Food::SampleLocation() {
-  return snake::Point{_random_w(_engine), _random_h(_engine)};
+snake::Point<int> Food::SampleLocation() {
+  return snake::Point<int>{_random_w(_engine), _random_h(_engine)};
 }

@@ -6,12 +6,12 @@
 using namespace snake;
 
 void GridSnake::Update() {
-  Point prev_cell{
+  Point<int> prev_cell{
       static_cast<int>(_head_x),
       static_cast<int>(
           _head_y)};  // We first capture the head's cell before updating.
   UpdateHead();
-  Point current_cell{
+  Point<int> current_cell{
       static_cast<int>(_head_x),
       static_cast<int>(_head_y)};  // Capture the head's cell after updating.
 
@@ -46,7 +46,7 @@ void GridSnake::UpdateHead() {
   _head_y = fmod(_head_y + _grid_height, _grid_height);
 }
 
-void GridSnake::UpdateBody(Point &current_head_cell, Point &prev_head_cell) {
+void GridSnake::UpdateBody(Point<int> &current_head_cell, Point<int> &prev_head_cell) {
   // Add previous head location to vector
   _body.push_back(prev_head_cell);
 
@@ -93,14 +93,8 @@ float GridSnake::GetHeadX() const { return _head_x; }
 
 float GridSnake::GetHeadY() const { return _head_y; }
 
-const std::vector<Point> &GridSnake::GetBody() const { return _body; }
+const std::vector<Point<int>> &GridSnake::GetBody() const { return _body; }
 
 float GridSnake::GetSpeed() const { return _speed; }
 
 void GridSnake::SetSpeed(float speed) { _speed = speed; }
-
-bool Point::operator==(const Point &rhs) const {
-  return std::tie(x, y) == std::tie(rhs.x, rhs.y);
-}
-
-bool Point::operator!=(const Point &rhs) const { return !(rhs == *this); }

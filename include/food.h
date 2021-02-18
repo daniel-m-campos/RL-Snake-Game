@@ -10,19 +10,19 @@ class Food {
   Food() = delete;
   Food(std::size_t grid_width, std::size_t grid_height);
   Food(std::size_t grid_width, std::size_t grid_height,
-       snake::Point init_location);
-  [[nodiscard]] const snake::Point& GetLocation() const;
+       snake::Point<int> init_location);
+  [[nodiscard]] const snake::Point<int>& GetLocation() const;
   bool TryFeed(snake::Snake* snake);
 
  private:
-  snake::Point _location{};
+  snake::Point<int> _location{};
   std::random_device _dev;
   std::mt19937 _engine;
   std::uniform_int_distribution<int> _random_w;
   std::uniform_int_distribution<int> _random_h;
 
   void PlaceFood(snake::Snake* snake);
-  snake::Point SampleLocation();
+  snake::Point<int> SampleLocation();
 };
 
 #endif  // RLSNAKEGAME_FOOD_H
