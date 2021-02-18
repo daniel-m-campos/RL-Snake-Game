@@ -1,3 +1,5 @@
+#include "gridworld.h"
+
 #include <iomanip>
 #include <iostream>
 
@@ -6,7 +8,6 @@
 #include "../src/learner.cpp"
 #include "../src/policy.cpp"
 #include "../src/rl_factory.cpp"
-#include "grid_world.h"
 #include "gtest/gtest.h"
 
 void PrintValue(ActionValuer<Position, Move>* valuer, Position& state,

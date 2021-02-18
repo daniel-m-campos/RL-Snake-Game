@@ -1,4 +1,4 @@
-#include "grid_world.h"
+#include "gridworld.h"
 
 #include <unordered_map>
 #include <vector>

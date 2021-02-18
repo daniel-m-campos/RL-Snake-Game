@@ -1,5 +1,5 @@
-#ifndef RLSNAKEGAME_GRID_WORLD_H
-#define RLSNAKEGAME_GRID_WORLD_H
+#ifndef RLSNAKEGAME_GRIDWORLD_H
+#define RLSNAKEGAME_GRIDWORLD_H
 
 #include <unordered_map>
 #include <vector>
@@ -63,4 +63,4 @@ class GridWorld : public Environment<Position, Move> {
   double _reward{0};
 };
 
-#endif  // RLSNAKEGAME_GRID_WORLD_H
+#endif  // RLSNAKEGAME_GRIDWORLD_H

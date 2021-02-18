@@ -1,7 +1,7 @@
 add_executable(
         INTEGRATION_TEST
-        grid_world.cpp
-        test.cpp
+        gridworld.cpp
+        gridworld_test.cpp
 )
 
 target_link_libraries(
