@@ -3,6 +3,9 @@
 #include <iostream>
 #include <string>
 
+#include "food.h"
+#include "snake.h"
+
 Renderer::Renderer(const std::size_t screen_width,
                    const std::size_t screen_height,
                    const std::size_t grid_width, const std::size_t grid_height)
@@ -39,7 +42,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(const snake::Snake &snake, snake::Point const &food) {
+void Renderer::Render(const snake::Snake &snake, const Food &food) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
@@ -50,8 +53,9 @@ void Renderer::Render(const snake::Snake &snake, snake::Point const &food) {
 
   // Render _food
   SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xCC, 0x00, 0xFF);
-  block.x = food.x * block.w;
-  block.y = food.y * block.h;
+  auto location = food.GetLocation();
+  block.x = location.x * block.w;
+  block.y = location.y * block.h;
   SDL_RenderFillRect(sdl_renderer, &block);
 
   // Render snake's _body

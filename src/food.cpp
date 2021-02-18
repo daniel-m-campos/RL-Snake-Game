@@ -16,11 +16,7 @@ Food::Food(std::size_t grid_width, std::size_t grid_height,
       _random_w{(0, static_cast<int>(grid_width))},
       _random_h{(0, static_cast<int>(grid_height))} {}
 
-snake::Point Food::GetLocation() {
-  std::cout << "Food.GetLocation() = {" << _location.x << "," << _location.y
-            << "}\n";
-  return _location;
-}
+const snake::Point& Food::GetLocation() const { return _location; }
 
 bool Food::TryFeed(snake::Snake* snake) {
   int new_x = static_cast<int>(snake->GetHeadX());

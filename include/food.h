@@ -11,7 +11,7 @@ class Food {
   Food(std::size_t grid_width, std::size_t grid_height);
   Food(std::size_t grid_width, std::size_t grid_height,
        snake::Point init_location);
-  snake::Point GetLocation();
+  const snake::Point& GetLocation() const;
   bool TryFeed(snake::Snake* snake);
 
  private:
