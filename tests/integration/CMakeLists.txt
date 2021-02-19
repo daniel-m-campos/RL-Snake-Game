@@ -3,6 +3,7 @@ add_executable(
         test.cpp
         gridworld.cpp
         gridworld_test.cpp
+        game_environment_test.cpp
 )
 
 target_link_libraries(

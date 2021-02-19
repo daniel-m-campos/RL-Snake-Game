@@ -1,23 +1,16 @@
 #include "gridworld.h"
 
-#include <iomanip>
-#include <iostream>
-
 #include "../src/action_valuer.cpp"
 #include "../src/agent.cpp"
 #include "../src/learner.cpp"
 #include "../src/policy.cpp"
 #include "../src/rl_factory.cpp"
 #include "gtest/gtest.h"
+#include "test_utils.h"
 
-void PrintValue(ActionValuer<Position, Move>* valuer, Position& state,
-                Move& action) {
-  std::cout << std::left << std::setw(4) << std::setfill(' ')
-            << valuer->GetValue(state, action) << "\t";
-}
-
-void PrintAction(Position& state, Move& action) {
-  std::unordered_map<Move, std::string> map{{
+template <typename S, typename A>
+void PrintAction(S& state, A& action) {
+  std::unordered_map<A, std::string> map{{
       {Move::kNorth, "^"},
       {Move::kSouth, "v"},
       {Move::kWest, "<"},
@@ -26,22 +19,6 @@ void PrintAction(Position& state, Move& action) {
 
   std::cout << std::left << std::setw(4) << std::setfill(' ') << map[action]
             << "\t";
-}
-
-void Print(ActionValuer<Position, Move>* valuer, bool values) {
-  std::cout << std::setprecision(3);
-  for (int y = 4; y >= 0; --y) {
-    for (int x = 0; x < 5; ++x) {
-      Position state{x, y};
-      auto action = valuer->ArgMax(state)[0];
-      if (values) {
-        PrintValue(valuer, state, action);
-      } else {
-        PrintAction(state, action);
-      }
-    }
-    std::cout << std::endl;
-  }
 }
 
 TEST(TestGridWorldSimulation, TestSimulationLoop) {
@@ -58,8 +35,8 @@ TEST(TestGridWorldSimulation, TestSimulationLoop) {
     agent->Update(environment.GetState(), environment.GetReward());
   }
 
-  Print(action_valuer.get(), true);
-  Print(action_valuer.get(), false);
+  Print(action_valuer.get(), true, 5);
+  Print(action_valuer.get(), false, 5);
 
   std::unordered_map<Position, Move> optimal_policy{{
       {{0, 4}, Move::kEast},
