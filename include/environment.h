@@ -5,8 +5,8 @@ template <typename S, typename A>
 class Environment {
  public:
   virtual ~Environment() = default;
-  virtual void Update(A) = 0;
-  virtual S GetState() = 0;
+  virtual void Update(const A&) = 0;
+  virtual const S& GetState() = 0;
   virtual double GetReward() = 0;
 };
 

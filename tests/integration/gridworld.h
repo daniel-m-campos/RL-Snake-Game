@@ -56,8 +56,8 @@ std::unique_ptr<StateActionMap<Position, Move>> CreateActionStateMap();
 
 class GridWorld : public Environment<Position, Move> {
  public:
-  void Update(Move action) override;
-  Position GetState() override;
+  void Update(const Move& action) override;
+  const Position& GetState() override;
   double GetReward() override;
 
  private:

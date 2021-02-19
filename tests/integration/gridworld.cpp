@@ -6,7 +6,7 @@
 
 #include "../src/state_action_map.cpp"
 
-void GridWorld::Update(Move action) {
+void GridWorld::Update(const Move& action) {
   auto new_position = _position + action;
   if (_position == new_position) {
     _reward = -1.0;
@@ -26,7 +26,7 @@ void GridWorld::Update(Move action) {
   _reward = 0.0;
 }
 
-Position GridWorld::GetState() { return _position; }
+const Position& GridWorld::GetState() { return _position; }
 
 double GridWorld::GetReward() { return _reward; }
 
