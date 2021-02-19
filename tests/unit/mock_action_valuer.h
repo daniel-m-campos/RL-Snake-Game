@@ -11,8 +11,7 @@ class MockActionValuer : public ActionValuer<S, A> {
   MOCK_METHOD(double, GetValue, (S state, A action), (override));
   MOCK_METHOD(void, SetValue, (S state, A action, double value), (override));
   MOCK_METHOD(std::vector<A>, ArgMax, (S state), (override));
-  MOCK_METHOD(std::vector<S>, GetStates, (), (override));
-  MOCK_METHOD(std::vector<A>, GetActions, (S state), (override));
+  MOCK_METHOD((StateActionMap<S, A>&), GetStateActionMap, (), (override));
 };
 
 #endif  // RLSNAKEGAME_MOCK_ACTION_VALUER_H

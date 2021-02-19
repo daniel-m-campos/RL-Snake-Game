@@ -31,6 +31,7 @@ if (BUILD_TESTS)
             src/learner.cpp
             src/agent.cpp
             src/rl_factory.cpp
+            src/state_action_map.cpp
     )
     add_subdirectory(tests)
     add_subdirectory(tests/unit)

@@ -45,9 +45,8 @@ void Print(ActionValuer<Position, Move>* valuer, bool values) {
 }
 
 TEST(TestGridWorldSimulation, TestSimulationLoop) {
-  auto state_action_map = CreateActionStateMap();
-  auto action_valuer =
-      std::make_shared<SimpleActionValuer<Position, Move>>(state_action_map);
+  auto action_valuer = std::make_shared<SimpleActionValuer<Position, Move>>(
+      CreateActionStateMap());
   auto agent = RLFactory<Position, Move>::CreateQAgent(
       action_valuer, 0.7, 0.9, 0.5, Position{0, 0}, Move::kNorth);
   GridWorld environment;

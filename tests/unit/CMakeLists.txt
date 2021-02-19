@@ -9,6 +9,7 @@ add_executable(
         rl_factory_tests.cpp
         food_tests.cpp
         game_environment_test.cpp
+        state_action_map_test.cpp
 )
 
 target_link_libraries(

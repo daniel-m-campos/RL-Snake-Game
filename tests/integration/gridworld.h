@@ -1,11 +1,13 @@
 #ifndef RLSNAKEGAME_GRIDWORLD_H
 #define RLSNAKEGAME_GRIDWORLD_H
 
+#include <memory>
 #include <unordered_map>
 #include <vector>
 
 #include "environment.h"
 #include "hash_util.h"
+#include "state_action_map.h"
 
 enum class Move {
   kNorth,
@@ -50,7 +52,7 @@ struct std::hash<Position> {
   }
 };
 
-std::unordered_map<Position, std::vector<Move>> CreateActionStateMap();
+std::unique_ptr<StateActionMap<Position, Move>> CreateActionStateMap();
 
 class GridWorld : public Environment<Position, Move> {
  public:

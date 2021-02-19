@@ -1,7 +1,10 @@
 #include "gridworld.h"
 
+#include <memory>
 #include <unordered_map>
 #include <vector>
+
+#include "../src/state_action_map.cpp"
 
 void GridWorld::Update(Move action) {
   auto new_position = _position + action;
@@ -27,7 +30,7 @@ Position GridWorld::GetState() { return _position; }
 
 double GridWorld::GetReward() { return _reward; }
 
-std::unordered_map<Position, std::vector<Move>> CreateActionStateMap() {
+std::unique_ptr<StateActionMap<Position, Move>> CreateActionStateMap() {
   std::unordered_map<Position, std::vector<Move>> state_action_map;
   auto moves = {Move::kNorth, Move::kSouth, Move::kEast, Move::kWest};
   for (int i = 0; i < 5; ++i) {
@@ -35,5 +38,5 @@ std::unordered_map<Position, std::vector<Move>> CreateActionStateMap() {
       state_action_map[{i, j}] = moves;
     }
   }
-  return state_action_map;
+  return std::make_unique<StateActionHashMap<Position, Move>>(state_action_map);
 }

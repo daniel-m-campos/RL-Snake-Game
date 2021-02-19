@@ -34,8 +34,11 @@ class EpsilonGreedyUniqueGreedyActionPerStateFixture : public ::testing::Test {
   };
 
   EpsilonGreedy<int, int> create_policy(double epsilon) {
+    auto state_action_map =
+        std::make_unique<StateActionHashMap<int, int>>(state_actions);
     return EpsilonGreedy<int, int>{
-        std::make_shared<SimpleActionValuer<int, int>>(action_value_map),
+        std::make_shared<SimpleActionValuer<int, int>>(
+            std::move(state_action_map), action_value_map),
         epsilon};
     ;
   }
