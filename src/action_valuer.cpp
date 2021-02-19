@@ -41,12 +41,12 @@ std::vector<A> SimpleActionValuer<S, A>::ArgMax(S state) {
 
 template <typename S, typename A>
 double SimpleActionValuer<S, A>::GetValue(S state, A action) {
-  return _action_value_map.at({state, action});
+  return _action_value_map[{state, action}];
 }
 
 template <typename S, typename A>
 void SimpleActionValuer<S, A>::SetValue(S state, A action, double new_value) {
-  _action_value_map.at({state, action}) = new_value;
+  _action_value_map[{state, action}] = new_value;
 }
 
 template <typename S, typename A>
