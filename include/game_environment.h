@@ -10,8 +10,8 @@
 #include "snake.h"
 
 struct GameState {
-  snake::Point<double> food;
-  snake::Point<double> tail;
+  snake::Point<int> food;
+  snake::Point<int> tail;
   bool operator==(const GameState& rhs) const;
   bool operator!=(const GameState& rhs) const;
   bool operator<(const GameState& rhs) const;
@@ -35,8 +35,8 @@ struct std::hash<GameState> {
 class GameEnvironment : public Environment<GameState, snake::Direction> {
  public:
   explicit GameEnvironment(std::unique_ptr<Game> game);
-  void Update(snake::Direction direction) override;
-  GameState GetState() override;
+  void Update(const snake::Direction& direction) override;
+  const GameState& GetState() override;
   double GetReward() override;
 
  private:
@@ -44,6 +44,7 @@ class GameEnvironment : public Environment<GameState, snake::Direction> {
   std::unique_ptr<Game> _game;
   GameState _state{};
   void UpdateGameState();
+  bool _alive{true};
 };
 
 #endif  // RLSNAKEGAME_GAME_ENVIRONMENT_H
