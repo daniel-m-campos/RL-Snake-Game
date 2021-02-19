@@ -10,8 +10,9 @@
 class Game {
  public:
   Game(std::size_t grid_width, std::size_t grid_height,
-       std::unique_ptr<snake::Snake> snake);
-  Game(std::unique_ptr<snake::Snake> snake, std::unique_ptr<Food> food);
+       std::unique_ptr<snake::Snake> snake, double speed_change = 0.02);
+  Game(std::unique_ptr<snake::Snake> snake, std::unique_ptr<Food> food,
+       double speed_change = 0.02);
   [[nodiscard]] int GetScore() const;
   void Update();
   [[nodiscard]] snake::Snake& GetSnake() const;
@@ -19,6 +20,7 @@ class Game {
 
  private:
   int _score{0};
+  double _speed_change;
   std::unique_ptr<snake::Snake> _snake;
   std::unique_ptr<Food> _food;
 };
