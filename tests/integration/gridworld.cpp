@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "../src/state_action_map.cpp"
+#include "state_action_map.h"
 
 void GridWorld::Update(const Move& action) {
   auto new_position = _position + action;

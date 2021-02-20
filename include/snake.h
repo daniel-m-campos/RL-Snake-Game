@@ -1,12 +1,25 @@
 #ifndef SNAKE_H
 #define SNAKE_H
 
+#include <set>
 #include <tuple>
 #include <vector>
 
 namespace snake {
 
-enum class Direction { kUp, kDown, kLeft, kRight };
+enum class Direction {
+  kUp,
+  kDown,
+  kLeft,
+  kRight,
+};
+
+const std::set<Direction> Directions{
+    Direction::kUp,
+    Direction::kDown,
+    Direction::kLeft,
+    Direction::kRight,
+};
 
 template <typename T>
 struct Point {

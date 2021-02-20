@@ -1,50 +1,47 @@
 #include "game_environment.h"
 
-#include "../src/action_valuer.cpp"
-#include "../src/agent.cpp"
-#include "../src/learner.cpp"
-#include "../src/policy.cpp"
-#include "../src/rl_factory.cpp"
-#include "../src/state_action_map.cpp"
+#include <iostream>
+
+#include "action_valuer.h"
 #include "gtest/gtest.h"
-#include "test_utils.h"
+#include "io.h"
+#include "rl_factory.h"
+#include "state_action_map.h"
 
-static constexpr std::size_t kGridWidth{10};
-static constexpr std::size_t kGridHeight{10};
+static constexpr std::size_t kGridWidth{16};
+static constexpr std::size_t kGridHeight{16};
 
-template <typename S, typename A>
-void PrintAction(S& state, A& action) {
-  std::unordered_map<A, std::string> map{{
-      {snake::Direction::kUp, "^"},
-      {snake::Direction::kDown, "v"},
-      {snake::Direction::kLeft, "<"},
-      {snake::Direction::kRight, ">"},
-  }};
-
-  std::cout << std::left << std::setw(4) << std::setfill(' ') << map[action]
-            << "\t";
+std::string FileName() {
+  return std::to_string(kGridWidth) + "x" + std::to_string(kGridHeight) +
+         "_action_valuer"
+         ".txt";
 }
 
-TEST(TestGameEnvironmentSimulation, TestSimulationLoop) {
-  std::set<snake::Direction> directions{
-      snake::Direction::kDown, snake::Direction::kUp, snake::Direction::kLeft,
-      snake::Direction::kRight};
-  auto state_action_map =
-      std::make_unique<SimpleStateActionMap<GameState, snake::Direction>>(
-          std::set<GameState>(), directions);
-  auto action_valuer =
-      std::make_shared<SimpleActionValuer<GameState, snake::Direction>>(
-          std::move(state_action_map));
+class GameEnvironmentFixture : public ::testing::Test {
+ public:
+  std::set<snake::Direction> directions{snake::Directions};
+  std::unique_ptr<SimpleStateActionMap<GameState, snake::Direction>>
+      state_action_map = {
+          std::make_unique<SimpleStateActionMap<GameState, snake::Direction>>(
+              std::set<GameState>(), directions)};
+  std::shared_ptr<SimpleActionValuer<GameState, snake::Direction>>
+      action_valuer =
+          std::make_shared<SimpleActionValuer<GameState, snake::Direction>>(
+              std::move(state_action_map));
+};
 
-  int num_games = 10000;
+TEST_F(GameEnvironmentFixture, TestSimulationLoop) {
+  // TODO: extract this simulator
+  int num_games = 10;
   for (int n = 0; n < num_games; ++n) {
     auto agent = RLFactory<GameState, snake::Direction>::CreateQAgent(
-        action_valuer,  0.9, 0.9, 0.5,
-        GameState{0, 0, 0, 0}, snake::Direction::kUp);
+        action_valuer, 0.9, 0.9, 0.5, GameState{0, 0, 0, 0},
+        snake::Direction::kUp);
     auto snake = std::make_unique<snake::GridSnake>(kGridWidth, kGridHeight);
     snake->SetSpeed(1);
     GameEnvironment environment{
         std::make_unique<Game>(kGridWidth, kGridHeight, std::move(snake), 0)};
+    // FIXME: terminating shouldn't rely on rewards
     double reward = 42;
     int count = 0;
     while (reward != 0) {
@@ -55,8 +52,6 @@ TEST(TestGameEnvironmentSimulation, TestSimulationLoop) {
       agent->Update(environment.GetState(), reward);
       ++count;
     }
-    std::cout << "Simulation #" << n + 1 << ", Actions #" << count << "\n";
+    io::Save(FileName(), action_valuer.get());
   }
-  Print(action_valuer.get(), true, 10);
-  Print(action_valuer.get(), false, 10);
 }

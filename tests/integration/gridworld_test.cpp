@@ -1,11 +1,8 @@
 #include "gridworld.h"
 
-#include "../src/action_valuer.cpp"
-#include "../src/agent.cpp"
-#include "../src/learner.cpp"
-#include "../src/policy.cpp"
-#include "../src/rl_factory.cpp"
+#include "action_valuer.h"
 #include "gtest/gtest.h"
+#include "rl_factory.h"
 #include "test_utils.h"
 
 template <typename S, typename A>
