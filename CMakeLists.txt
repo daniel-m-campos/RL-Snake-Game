@@ -24,15 +24,6 @@ if (BUILD_TESTS)
             src/food.cpp
             src/game_environment.cpp
     )
-    add_library(
-            reinforcement_learning
-            src/policy.cpp
-            src/action_valuer.cpp
-            src/learner.cpp
-            src/agent.cpp
-            src/rl_factory.cpp
-            src/state_action_map.cpp
-    )
     add_subdirectory(tests)
     add_subdirectory(tests/unit)
     add_subdirectory(tests/integration)
