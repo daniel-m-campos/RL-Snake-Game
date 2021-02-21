@@ -42,9 +42,9 @@ TEST_F(GameEnvironmentFixture, TestSimulationLoop) {
     GameEnvironment environment{
         std::make_unique<Game>(kGridWidth, kGridHeight, std::move(snake), 0)};
     // FIXME: terminating shouldn't rely on rewards
-    double reward = 42;
+    double reward;
     int count = 0;
-    while (reward != 0) {
+    while (!environment.HasTerminated()) {
       auto position = environment.GetState();
       auto action = agent->GetAction(position);
       environment.Update(action);

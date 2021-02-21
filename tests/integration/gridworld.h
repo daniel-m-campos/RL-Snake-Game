@@ -59,6 +59,7 @@ class GridWorld : public Environment<Position, Move> {
   void Update(const Move& action) override;
   const Position& GetState() override;
   double GetReward() override;
+  bool HasTerminated() override;
 
  private:
   Position _position;

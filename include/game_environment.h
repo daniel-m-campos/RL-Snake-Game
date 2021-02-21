@@ -38,6 +38,7 @@ class GameEnvironment : public Environment<GameState, snake::Direction> {
   void Update(const snake::Direction& direction) override;
   const GameState& GetState() override;
   double GetReward() override;
+  bool HasTerminated() override;
 
  private:
   double _reward{0};

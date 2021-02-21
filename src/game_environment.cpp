@@ -72,3 +72,5 @@ void GameEnvironment::UpdateGameState() {
 const GameState& GameEnvironment::GetState() { return _state; }
 
 double GameEnvironment::GetReward() { return _reward; }
+
+bool GameEnvironment::HasTerminated() { return !_alive; }

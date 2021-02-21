@@ -29,7 +29,6 @@ void GridWorld::Update(const Move& action) {
 const Position& GridWorld::GetState() { return _position; }
 
 double GridWorld::GetReward() { return _reward; }
-
 std::unique_ptr<StateActionMap<Position, Move>> CreateActionStateMap() {
   std::unordered_map<Position, std::vector<Move>> state_action_map;
   auto moves = {Move::kNorth, Move::kSouth, Move::kEast, Move::kWest};
@@ -40,3 +39,5 @@ std::unique_ptr<StateActionMap<Position, Move>> CreateActionStateMap() {
   }
   return std::make_unique<StateActionHashMap<Position, Move>>(state_action_map);
 }
+
+bool GridWorld::HasTerminated() { return false; }

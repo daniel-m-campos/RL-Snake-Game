@@ -8,6 +8,7 @@ class Environment {
   virtual void Update(const A&) = 0;
   virtual const S& GetState() = 0;
   virtual double GetReward() = 0;
+  virtual bool HasTerminated() = 0;
 };
 
 #endif  // RLSNAKEGAME_ENVIRONMENT_H
