@@ -7,8 +7,8 @@
 #include <string>
 
 #include "action_valuer.h"
+#include "action_valuer_factory.h"
 #include "game_environment.h"
-#include "rl_factory.h"
 
 namespace io {
 
@@ -71,8 +71,7 @@ std::unique_ptr<ActionValuer<GameState, snake::Direction>> io::Load(
       }
     }
 
-    auto action_valuer =
-        RLFactory<GameState, snake::Direction>::CreateSimpleActionValuer(
+    auto action_valuer = ActionValuerFactory<GameState, snake::Direction>::CreateSimpleActionValuer(
             state_action_dict);
     for (const auto& [state, actions] : state_action_dict) {
       for (const auto& action : actions) {

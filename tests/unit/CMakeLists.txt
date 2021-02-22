@@ -6,7 +6,7 @@ add_executable(
         action_valuer_tests.cpp
         learner_tests.cpp
         agent_tests.cpp
-        rl_factory_tests.cpp
+        agent_factory_tests.cpp
         food_tests.cpp
         game_environment_test.cpp
         state_action_map_test.cpp

@@ -1,10 +1,10 @@
-#ifndef RLSNAKEGAME_RL_FACTORY_H
-#define RLSNAKEGAME_RL_FACTORY_H
+#ifndef RLSNAKEGAME_AGENT_FACTORY_H
+#define RLSNAKEGAME_AGENT_FACTORY_H
 
 #include "agent.h"
 
 template <typename S, typename A>
-class RLFactory {
+class AgentFactory {
  public:
   static std::unique_ptr<Agent<S, A>> CreateQAgent(
       std::unordered_map<S, std::vector<A>> state_action_map, double epsilon,
@@ -15,16 +15,10 @@ class RLFactory {
       std::shared_ptr<ActionValuer<S, A>> action_valuer, double epsilon,
       double discount_factor, double step_size, S initial_state,
       A initial_action);
-
-  static std::unique_ptr<ActionValuer<S, A>> CreateSimpleActionValuer(
-      const std::set<S>& states, const std::set<A>& actions);
-
-  static std::unique_ptr<ActionValuer<S, A>> CreateSimpleActionValuer(
-      std::unordered_map<S, std::vector<A>> state_action_map);
 };
 
 template <typename S, typename A>
-std::unique_ptr<Agent<S, A>> RLFactory<S, A>::CreateQAgent(
+std::unique_ptr<Agent<S, A>> AgentFactory<S, A>::CreateQAgent(
     std::unordered_map<S, std::vector<A>> state_action_map, double epsilon,
     double discount_factor, double step_size, S initial_state,
     A initial_action) {
@@ -38,7 +32,7 @@ std::unique_ptr<Agent<S, A>> RLFactory<S, A>::CreateQAgent(
 }
 
 template <typename S, typename A>
-std::unique_ptr<Agent<S, A>> RLFactory<S, A>::CreateQAgent(
+std::unique_ptr<Agent<S, A>> AgentFactory<S, A>::CreateQAgent(
     std::shared_ptr<ActionValuer<S, A>> action_valuer, double epsilon,
     double discount_factor, double step_size, S initial_state,
     A initial_action) {
@@ -49,18 +43,4 @@ std::unique_ptr<Agent<S, A>> RLFactory<S, A>::CreateQAgent(
                                            initial_action);
 }
 
-template <typename S, typename A>
-std::unique_ptr<ActionValuer<S, A>> RLFactory<S, A>::CreateSimpleActionValuer(
-    const std::set<S>& states, const std::set<A>& actions) {
-  return std::make_unique<SimpleActionValuer<S, A>>(
-      std::make_unique<SimpleStateActionMap<S, A>>(states, actions));
-}
-
-template <typename S, typename A>
-std::unique_ptr<ActionValuer<S, A>> RLFactory<S, A>::CreateSimpleActionValuer(
-    std::unordered_map<S, std::vector<A>> state_action_map) {
-  return std::make_unique<SimpleActionValuer<S, A>>(
-      std::make_unique<StateActionHashMap<S, A>>(state_action_map));
-}
-
-#endif  // RLSNAKEGAME_RL_FACTORY_H
+#endif  // RLSNAKEGAME_AGENT_FACTORY_H
