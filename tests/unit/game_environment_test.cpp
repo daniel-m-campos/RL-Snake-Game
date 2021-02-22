@@ -26,9 +26,11 @@ class GameEnvironmentInitializationFixture : public ::testing::Test {
 };
 
 TEST_F(GameEnvironmentInitializationFixture, TestInitialUpdate) {
+  snake::Point<int> expected_tail{kGridWidth / 2, kGridHeight / 2};
+  EXPECT_EQ(environment.GetState().snake_head, expected_tail);
   environment.Update(snake::Direction::kRight);
-  const snake::Point<int> expected_tail{0, 0};
-  EXPECT_EQ(environment.GetState().tail, expected_tail);
+  expected_tail.x += 1;
+  EXPECT_EQ(environment.GetState().snake_head, expected_tail);
 }
 
 TEST_F(GameEnvironmentInitializationFixture, TestGetRewardOnMovement) {
