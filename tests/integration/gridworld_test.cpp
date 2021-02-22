@@ -1,8 +1,9 @@
 #include "gridworld.h"
 
 #include "action_valuer.h"
+#include "agent_factory.h"
 #include "gtest/gtest.h"
-#include "rl_factory.h"
+#include "simulator.h"
 #include "test_utils.h"
 
 template <typename S, typename A>
@@ -21,16 +22,11 @@ void PrintAction(S& state, A& action) {
 TEST(TestGridWorldSimulation, TestSimulationLoop) {
   auto action_valuer = std::make_shared<SimpleActionValuer<Position, Move>>(
       CreateActionStateMap());
-  auto agent = RLFactory<Position, Move>::CreateQAgent(
+  auto agent = AgentFactory<Position, Move>::CreateQAgent(
       action_valuer, 0.7, 0.9, 0.5, Position{0, 0}, Move::kNorth);
   GridWorld environment;
 
-  for (int n = 0; n < 10000; ++n) {
-    auto position = environment.GetState();
-    auto action = agent->GetAction(position);
-    environment.Update(action);
-    agent->Update(environment.GetState(), environment.GetReward());
-  }
+  RunEpisode(environment, *agent, 10000);
 
   Print(action_valuer.get(), true, 5);
   Print(action_valuer.get(), false, 5);

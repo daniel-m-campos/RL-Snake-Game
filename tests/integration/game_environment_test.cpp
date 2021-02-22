@@ -3,9 +3,10 @@
 #include <iostream>
 
 #include "action_valuer.h"
+#include "agent_factory.h"
+#include "game_simulator.h"
 #include "gtest/gtest.h"
 #include "io.h"
-#include "rl_factory.h"
 #include "state_action_map.h"
 
 static constexpr std::size_t kGridWidth{16};
@@ -31,27 +32,17 @@ class GameEnvironmentFixture : public ::testing::Test {
 };
 
 TEST_F(GameEnvironmentFixture, TestSimulationLoop) {
-  // TODO: extract this simulator
-  int num_games = 10;
-  for (int n = 0; n < num_games; ++n) {
-    auto agent = RLFactory<GameState, snake::Direction>::CreateQAgent(
-        action_valuer, 0.9, 0.9, 0.5, GameState{0, 0, 0, 0},
-        snake::Direction::kUp);
+  auto agent = AgentFactory<GameState, snake::Direction>::CreateQAgent(
+      action_valuer, 0.9, 0.9, 0.5, GameState{0, 0, 0, 0},
+      snake::Direction::kUp);
+  auto environment_factory = [&]() {
     auto snake = std::make_unique<snake::GridSnake>(kGridWidth, kGridHeight);
     snake->SetSpeed(1);
-    GameEnvironment environment{
-        std::make_unique<Game>(kGridWidth, kGridHeight, std::move(snake), 0)};
-    // FIXME: terminating shouldn't rely on rewards
-    double reward;
-    int count = 0;
-    while (!environment.HasTerminated()) {
-      auto position = environment.GetState();
-      auto action = agent->GetAction(position);
-      environment.Update(action);
-      reward = environment.GetReward();
-      agent->Update(environment.GetState(), reward);
-      ++count;
-    }
-    io::Save(FileName(), action_valuer.get());
-  }
+    auto game =
+        std::make_unique<Game>(kGridWidth, kGridHeight, std::move(snake), 0);
+    return GameEnvironment(std::move(game));
+  };
+  GameSimulator simulator{environment_factory, *agent};
+  simulator.Simulate(100'000, 50'000);
+  io::Save(FileName(), action_valuer.get());
 }

@@ -23,6 +23,7 @@ if (BUILD_TESTS)
             src/snake.cpp
             src/food.cpp
             src/game_environment.cpp
+            src/game_simulator.cpp
     )
     add_subdirectory(tests)
     add_subdirectory(tests/unit)
