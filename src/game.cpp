@@ -26,4 +26,5 @@ void Game::Update() {
 int Game::GetScore() const { return _score; }
 
 snake::Snake &Game::GetSnake() const { return *_snake; }
+
 Food &Game::GetFood() const { return *_food; }

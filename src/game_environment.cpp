@@ -36,6 +36,24 @@ bool GameState::operator>=(const GameState& rhs) const {
   return !(*this < rhs);
 }
 
+GameState GameState::Create(Game& game) {
+  auto& current_food = game.GetFood().GetLocation();
+  snake::Point<int> new_food{
+      static_cast<int>(current_food.x - game.GetSnake().GetHeadX()),
+      static_cast<int>(current_food.y - game.GetSnake().GetHeadY())};
+  snake::Point<int> new_tail = [&]() {
+    if (game.GetSnake().GetBody().empty()) {
+      return snake::Point<int>{0, 0};
+    } else {
+      auto& current_tail = game.GetSnake().GetBody().back();
+      return snake::Point<int>{
+          static_cast<int>(current_tail.x - game.GetSnake().GetHeadX()),
+          static_cast<int>(current_tail.y - game.GetSnake().GetHeadY())};
+    }
+  }();
+  return GameState{new_food, new_tail};
+}
+
 void GameEnvironment::Update(const snake::Direction& action) {
   if (!_alive) {
     _reward = 0;
@@ -57,16 +75,7 @@ void GameEnvironment::Update(const snake::Direction& action) {
 
 void GameEnvironment::UpdateGameState() {
   auto& food = _game->GetFood().GetLocation();
-  _state.food.x = static_cast<int>(food.x - _game->GetSnake().GetHeadX());
-  _state.food.y = static_cast<int>(food.y - _game->GetSnake().GetHeadY());
-  if (_game->GetSnake().GetBody().empty()) {
-    _state.tail.x = 0.0;
-    _state.tail.y = 0.0;
-  } else {
-    auto& tail = _game->GetSnake().GetBody().back();
-    _state.tail.x = static_cast<int>(tail.x - _game->GetSnake().GetHeadX());
-    _state.tail.y = static_cast<int>(tail.y - _game->GetSnake().GetHeadY());
-  }
+  _state = GameState::Create(*_game);
 }
 
 const GameState& GameEnvironment::GetState() { return _state; }

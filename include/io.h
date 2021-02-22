@@ -70,9 +70,13 @@ std::unique_ptr<ActionValuer<GameState, snake::Direction>> io::Load(
         action_value_dict[{state, direction}] = value;
       }
     }
+    std::set<GameState> states;
+    std::transform(state_action_dict.begin(), state_action_dict.end(),
+                   std::inserter(states, states.end()),
+                   [](auto pair) { return pair.first; });
 
     auto action_valuer = ActionValuerFactory<GameState, snake::Direction>::
-        CreateSimpleActionValuer(state_action_dict);
+        CreateSimpleActionValuer(states, snake::Directions);
     for (const auto& [state, actions] : state_action_dict) {
       for (const auto& action : actions) {
         action_valuer->SetValue(state, action,

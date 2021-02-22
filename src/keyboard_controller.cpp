@@ -1,20 +1,22 @@
-#include "controller.h"
+#include "keyboard_controller.h"
 
 #include "SDL.h"
-#include "snake.h"
+#include "game.h"
 
-void Controller::ChangeDirection(snake::Snake &snake, snake::Direction input,
-                                 snake::Direction opposite) const {
+void KeyboardController::ChangeDirection(snake::Snake& snake,
+                                         snake::Direction input,
+                                         snake::Direction opposite) {
   if (snake.GetDirection() != opposite || snake.Size() == 1) {
     snake.SetDirection(input);
   }
 }
 
-void Controller::HandleInput(bool &running, snake::Snake &snake) const {
+bool KeyboardController::Update(Game& game) {
   SDL_Event e;
+  auto& snake = game.GetSnake();
   while (SDL_PollEvent(&e)) {
     if (e.type == SDL_QUIT) {
-      running = false;
+      return false;
     } else if (e.type == SDL_KEYDOWN) {
       switch (e.key.keysym.sym) {
         case SDLK_UP:
@@ -39,4 +41,5 @@ void Controller::HandleInput(bool &running, snake::Snake &snake) const {
       }
     }
   }
+  return true;
 }

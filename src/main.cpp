@@ -1,11 +1,13 @@
+#include <agent_controller.h>
+
 #include <iostream>
 
-#include "controller.h"
 #include "game.h"
+#include "keyboard_controller.h"
 #include "renderer.h"
 #include "snake.h"
 
-void GameLoop(Game& game, const Controller& controller, Renderer& renderer,
+void GameLoop(Game& game, Controller& controller, Renderer& renderer,
               std::size_t target_frame_duration) {
   Uint32 title_timestamp = SDL_GetTicks();
   Uint32 frame_start;
@@ -17,7 +19,7 @@ void GameLoop(Game& game, const Controller& controller, Renderer& renderer,
   while (running) {
     frame_start = SDL_GetTicks();
 
-    controller.HandleInput(running, game.GetSnake());
+    running = controller.Update(game);
     game.Update();
     renderer.Render(game.GetSnake(), game.GetFood());
 
@@ -47,7 +49,8 @@ int main() {
   constexpr std::size_t kGridHeight{32};
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
-  Controller controller;
+  KeyboardController controller;
+//  AgentController controller;
   Game game(kGridWidth, kGridHeight,
             std::make_unique<snake::GridSnake>(kGridWidth, kGridHeight));
 

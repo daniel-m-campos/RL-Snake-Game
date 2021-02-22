@@ -18,6 +18,7 @@ struct GameState {
   bool operator>(const GameState& rhs) const;
   bool operator<=(const GameState& rhs) const;
   bool operator>=(const GameState& rhs) const;
+  static GameState Create(Game& game);
 };
 
 template <>

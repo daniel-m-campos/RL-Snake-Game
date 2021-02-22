@@ -1,18 +1,12 @@
-#ifndef CONTROLLER_H
-#define CONTROLLER_H
+#ifndef RLSNAKEGAME_CONTROLLER_H
+#define RLSNAKEGAME_CONTROLLER_H
 
-namespace snake {
-class Snake;           // forward declaration
-enum class Direction;  // forward declaration
-}  // namespace snake
+#include "game.h"
 
 class Controller {
  public:
-  void HandleInput(bool &running, snake::Snake &snake) const;
-
- private:
-  void ChangeDirection(snake::Snake &snake, snake::Direction input,
-                       snake::Direction opposite) const;
+  virtual ~Controller() = default;
+  virtual bool Update(Game& game) = 0;
 };
 
-#endif
+#endif  // RLSNAKEGAME_CONTROLLER_H
