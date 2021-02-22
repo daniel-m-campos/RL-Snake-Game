@@ -1,9 +1,21 @@
 #include "snake.h"
 
 #include <cmath>
-#include <tuple>
 
 using namespace snake;
+
+Direction snake::GetOpposite(const Direction &direction) {
+  switch (direction) {
+    case snake::Direction::kDown:
+      return snake::Direction::kUp;
+    case snake::Direction::kUp:
+      return snake::Direction::kDown;
+    case snake::Direction::kLeft:
+      return snake::Direction::kRight;
+    case snake::Direction::kRight:
+      return snake::Direction::kLeft;
+  }
+}
 
 void GridSnake::Update() {
   Point<int> prev_cell{
@@ -86,7 +98,11 @@ size_t GridSnake::Size() const { return _size; }
 
 enum Direction GridSnake::GetDirection() const { return _direction; }
 
-void GridSnake::SetDirection(Direction direction) { _direction = direction; }
+void GridSnake::SetDirection(Direction direction) {
+  if (direction != GetOpposite(_direction) || Size() == 1) {
+    _direction = direction;
+  }
+}
 
 bool GridSnake::IsAlive() const { return _alive; }
 

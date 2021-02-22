@@ -14,6 +14,8 @@ enum class Direction {
   kRight,
 };
 
+Direction GetOpposite(const Direction&);
+
 const std::set<Direction> Directions{
     Direction::kUp,
     Direction::kDown,
