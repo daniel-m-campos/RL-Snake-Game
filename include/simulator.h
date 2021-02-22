@@ -11,11 +11,9 @@ static void RunEpisode(Environment<S, A>& environment, Agent<S, A>& agent,
                        long max_steps) {
   for (int count = 0; !environment.HasTerminated() && count < max_steps;
        ++count) {
-    auto position = environment.GetState();
-    auto action = agent.GetAction(position);
+    auto action = agent.GetAction(environment.GetState());
     environment.Update(action);
-    auto reward = environment.GetReward();
-    agent.Update(environment.GetState(), reward);
+    agent.Update(environment.GetState(), environment.GetReward());
   }
 }
 

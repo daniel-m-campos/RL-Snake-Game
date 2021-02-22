@@ -7,5 +7,6 @@ TEST(RLFactoryTest, TestCreateQAgent) {
       {1, {1, 3}},
       {2, {2, 4}},
   };
-  auto agent = AgentFactory<int, int>::CreateQAgent(state_action_map, 0.1, 0.95, 0.2, 0, 0);
+  auto agent = AgentFactory<int, int>::CreateQAgent(state_action_map, 0.1, 0.95,
+                                                    0.2, 0, 0);
 }

@@ -46,7 +46,8 @@ void GridSnake::UpdateHead() {
   _head_y = fmod(_head_y + _grid_height, _grid_height);
 }
 
-void GridSnake::UpdateBody(Point<int> &current_head_cell, Point<int> &prev_head_cell) {
+void GridSnake::UpdateBody(Point<int> &current_head_cell,
+                           Point<int> &prev_head_cell) {
   // Add previous head location to vector
   _body.push_back(prev_head_cell);
 

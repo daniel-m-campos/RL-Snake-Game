@@ -4,7 +4,7 @@
 #include "game_environment.h"
 #include "simulator.h"
 
-class GameSimulator : Simulator {
+class GameSimulator : public Simulator {
  public:
   using GameAgent = Agent<GameState, snake::Direction>;
   using EnvironmentFactory = std::function<GameEnvironment(void)>;
