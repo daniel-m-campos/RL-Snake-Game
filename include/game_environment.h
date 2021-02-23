@@ -10,25 +10,24 @@
 #include "snake.h"
 
 struct GameState {
-  snake::Point<int> food;
-  snake::Point<int> tail;
+  std::vector<snake::Point<int>> body_to_food;
+  static GameState Create(Game& game);
   bool operator==(const GameState& rhs) const;
   bool operator!=(const GameState& rhs) const;
   bool operator<(const GameState& rhs) const;
   bool operator>(const GameState& rhs) const;
   bool operator<=(const GameState& rhs) const;
   bool operator>=(const GameState& rhs) const;
-  static GameState Create(Game& game);
 };
 
 template <>
 struct std::hash<GameState> {
   inline size_t operator()(const GameState& state) const {
     size_t seed = 0;
-    ::hash_combine(seed, state.food.x);
-    ::hash_combine(seed, state.food.y);
-    ::hash_combine(seed, state.tail.x);
-    ::hash_combine(seed, state.tail.y);
+    for (const auto& part : state.body_to_food) {
+      ::hash_combine(seed, part.x);
+      ::hash_combine(seed, part.y);
+    }
     return seed;
   }
 };

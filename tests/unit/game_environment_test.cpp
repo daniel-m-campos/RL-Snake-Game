@@ -6,8 +6,8 @@ static constexpr std::size_t kGridWidth{32};
 static constexpr std::size_t kGridHeight{32};
 
 TEST(GameStateTest, TestComparisonOperators) {
-  const GameState first{0, 1, 2, 3};
-  const GameState second{4, 5, 6, 7};
+  const GameState first{{{0, 1}, {2, 3}}};
+  const GameState second{{{4, 5}, {6, 7}}};
   EXPECT_EQ(first, first);
   EXPECT_EQ(second, second);
   EXPECT_FALSE(first == second);
@@ -20,17 +20,20 @@ TEST(GameStateTest, TestComparisonOperators) {
 
 class GameEnvironmentInitializationFixture : public ::testing::Test {
  public:
+  snake::Point<int> init_location{10, 20};
   GameEnvironment environment{std::make_unique<Game>(
-      kGridWidth, kGridHeight,
-      std::make_unique<snake::GridSnake>(kGridWidth, kGridHeight))};
+      std::make_unique<snake::GridSnake>(kGridWidth, kGridHeight),
+      std::make_unique<Food>(kGridWidth, kGridHeight, init_location))};
 };
 
 TEST_F(GameEnvironmentInitializationFixture, TestInitialUpdate) {
-  snake::Point<int> expected_tail{kGridWidth / 2, kGridHeight / 2};
-  EXPECT_EQ(environment.GetState().snake_head, expected_tail);
-  environment.Update(snake::Direction::kRight);
-  expected_tail.x += 1;
-  EXPECT_EQ(environment.GetState().snake_head, expected_tail);
+  snake::Point<int> expected_head_to_food{
+      static_cast<int>(init_location.x - kGridWidth / 2),
+      static_cast<int>(init_location.y - kGridHeight / 2)};
+  EXPECT_EQ(environment.GetState().body_to_food[0], expected_head_to_food);
+  environment.Update(snake::Direction::kLeft);
+  expected_head_to_food.x += 1;
+  EXPECT_EQ(environment.GetState().body_to_food[0], expected_head_to_food);
 }
 
 TEST_F(GameEnvironmentInitializationFixture, TestGetRewardOnMovement) {

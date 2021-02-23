@@ -11,7 +11,7 @@ class IOFixture : public ::testing::Test {
 
 TEST_F(IOFixture, TestLoad) {
   auto action_valuer = io::Load<GameState, snake::Direction>(filename);
-  EXPECT_EQ(action_valuer->GetValue({0, 0, 0, 0}, snake::Direction{0}), 0.367);
-  EXPECT_EQ(action_valuer->GetValue({-2, 2, 0, 0}, snake::Direction{3}),
-            0.02153);
+  EXPECT_EQ(action_valuer->GetValue({{{-15, -15}}}, snake::Direction{0}), 0.0);
+  EXPECT_EQ(action_valuer->GetValue({{{-15, -15}}}, snake::Direction{1}),
+            0.475653);
 }

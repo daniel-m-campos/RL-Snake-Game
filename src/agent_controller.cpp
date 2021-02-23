@@ -14,12 +14,12 @@ AgentController::AgentController() {
   std::shared_ptr<ActionValuer<GameState, snake::Direction>> action_valuer{
       std::move(unique_valuer)};
   _agent = AgentFactory<GameState, snake::Direction>::CreateQAgent(
-      action_valuer, 0.0, 0.9, 0.5, GameState{0, 0, 0, 0},
+      action_valuer, 0.01, 0.9, 0.5, GameState{{{8, 8}}},
       snake::Direction::kUp);
 }
 
 bool AgentController::Update(Game& game) {
-  std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  std::this_thread::sleep_for(std::chrono::milliseconds(250));
   auto state = GameState::Create(game);
   auto action = _agent->GetAction(state);
   snake::Snake& snake = game.GetSnake();

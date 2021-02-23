@@ -5,8 +5,13 @@
 
 #include "game.h"
 
+GameEnvironment::GameEnvironment(std::unique_ptr<Game> game)
+    : _game{std::move(game)} {
+  UpdateGameState();
+}
+
 bool GameState::operator==(const GameState& rhs) const {
-  return std::tie(food, tail) == std::tie(rhs.food, rhs.tail);
+  return std::tie(body_to_food) == std::tie(rhs.body_to_food);
 }
 
 bool GameState::operator!=(const GameState& rhs) const {
@@ -14,16 +19,7 @@ bool GameState::operator!=(const GameState& rhs) const {
 }
 
 bool GameState::operator<(const GameState& rhs) const {
-  auto SquareDistance = [](const auto& point) -> int {
-    return pow(point.x, 2) + pow(point.y, 2);
-  };
-  return SquareDistance(food) + SquareDistance(tail) <
-         SquareDistance(rhs.food) + SquareDistance(rhs.tail);
-}
-
-GameEnvironment::GameEnvironment(std::unique_ptr<Game> game)
-    : _game{std::move(game)} {
-  UpdateGameState();
+  return std::tie(body_to_food) < std::tie(rhs.body_to_food);
 }
 
 bool GameState::operator>(const GameState& rhs) const { return rhs < *this; }
@@ -37,21 +33,15 @@ bool GameState::operator>=(const GameState& rhs) const {
 }
 
 GameState GameState::Create(Game& game) {
-  auto& current_food = game.GetFood().GetLocation();
-  snake::Point<int> new_food{
-      static_cast<int>(current_food.x - game.GetSnake().GetHeadX()),
-      static_cast<int>(current_food.y - game.GetSnake().GetHeadY())};
-  snake::Point<int> new_tail = [&]() {
-    if (game.GetSnake().GetBody().empty()) {
-      return snake::Point<int>{0, 0};
-    } else {
-      auto& current_tail = game.GetSnake().GetBody().back();
-      return snake::Point<int>{
-          static_cast<int>(current_tail.x - game.GetSnake().GetHeadX()),
-          static_cast<int>(current_tail.y - game.GetSnake().GetHeadY())};
-    }
-  }();
-  return GameState{new_food, new_tail};
+  auto food = game.GetFood().GetLocation();
+  std::vector<snake::Point<int>> body_to_food;
+  body_to_food.push_back(
+      {static_cast<int>(food.x - game.GetSnake().GetHeadX()),
+       static_cast<int>(food.y - game.GetSnake().GetHeadY())});
+  for (const auto& part : game.GetSnake().GetBody()) {
+    body_to_food.push_back({food.x - part.x, food.y - part.y});
+  }
+  return GameState{body_to_food};
 }
 
 void GameEnvironment::Update(const snake::Direction& action) {
@@ -61,6 +51,7 @@ void GameEnvironment::Update(const snake::Direction& action) {
   }
   auto score = _game->GetScore();
   _game->GetSnake().SetDirection(action);
+  _game->GetSnake().SetSpeed(1);
   _game->Update();
   UpdateGameState();
   if (!_game->GetSnake().IsAlive()) {

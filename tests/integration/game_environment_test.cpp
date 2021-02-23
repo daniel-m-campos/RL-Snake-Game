@@ -33,8 +33,7 @@ class GameEnvironmentFixture : public ::testing::Test {
 
 TEST_F(GameEnvironmentFixture, TestSimulationLoop) {
   auto agent = AgentFactory<GameState, snake::Direction>::CreateQAgent(
-      action_valuer, 0.9, 0.9, 0.5, GameState{0, 0, 0, 0},
-      snake::Direction::kUp);
+      action_valuer, 0.5, 0.9, 0.5, GameState{{{0, 0}}}, snake::Direction::kUp);
   auto environment_factory = [&]() {
     auto snake = std::make_unique<snake::GridSnake>(kGridWidth, kGridHeight);
     snake->SetSpeed(1);
@@ -43,6 +42,6 @@ TEST_F(GameEnvironmentFixture, TestSimulationLoop) {
     return GameEnvironment(std::move(game));
   };
   GameSimulator simulator{environment_factory, *agent};
-  simulator.Simulate(100'000, 50'000);
-  io::Save(FileName(), action_valuer.get());
+  simulator.Simulate(1000, 1'000'000);
+  io::Save(FileName(), *action_valuer);
 }
