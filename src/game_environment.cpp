@@ -1,6 +1,5 @@
 #include "game_environment.h"
 
-#include <cmath>
 #include <tuple>
 
 #include "game.h"
@@ -42,6 +41,14 @@ GameState GameState::Create(Game& game) {
     body_to_food.push_back({food.x - part.x, food.y - part.y});
   }
   return GameState{body_to_food};
+}
+
+std::ostream& operator<<(std::ostream& os, const GameState& state) {
+  for (const auto& part : state.body_to_food) {
+    os << part.x << ",";
+    os << part.y << ",";
+  }
+  return os;
 }
 
 void GameEnvironment::Update(const snake::Direction& action) {

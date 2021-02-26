@@ -1,6 +1,7 @@
 #ifndef SNAKE_H
 #define SNAKE_H
 
+#include <ostream>
 #include <set>
 #include <tuple>
 #include <vector>
@@ -13,6 +14,8 @@ enum class Direction {
   kLeft,
   kRight,
 };
+
+std::ostream &operator<<(std::ostream &os, Direction action);
 
 Direction GetOpposite(const Direction &);
 

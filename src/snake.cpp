@@ -1,8 +1,14 @@
 #include "snake.h"
 
 #include <cmath>
+#include <ostream>
 
 using namespace snake;
+
+std::ostream &snake::operator<<(std::ostream &os, Direction action) {
+  os << static_cast<int>(action);
+  return os;
+}
 
 Direction snake::GetOpposite(const Direction &direction) {
   switch (direction) {

@@ -15,3 +15,9 @@ TEST_F(IOFixture, TestLoad) {
   EXPECT_EQ(action_valuer->GetValue({{{-15, -15}}}, snake::Direction{1}),
             0.475653);
 }
+
+TEST_F(IOFixture, TestFindFiles) {
+  auto files = io::FindFiles();
+  EXPECT_EQ(files.size(), 1);
+  EXPECT_EQ(files[0], filename);
+}

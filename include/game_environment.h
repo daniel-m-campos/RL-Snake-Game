@@ -2,6 +2,7 @@
 #define RLSNAKEGAME_GAME_ENVIRONMENT_H
 
 #include <memory>
+#include <ostream>
 #include <unordered_map>
 
 #include "environment.h"
@@ -18,6 +19,7 @@ struct GameState {
   bool operator>(const GameState& rhs) const;
   bool operator<=(const GameState& rhs) const;
   bool operator>=(const GameState& rhs) const;
+  friend std::ostream& operator<<(std::ostream& os, const GameState& state);
 };
 
 template <>
