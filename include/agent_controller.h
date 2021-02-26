@@ -10,11 +10,10 @@
 
 class AgentController : public Controller {
  public:
-  AgentController();
+  explicit AgentController(const std::string& filename);
   bool Update(Game& game) override;
 
  private:
-  static const std::string _filename;
   std::unique_ptr<Agent<GameState, snake::Direction>> _agent;
 };
 

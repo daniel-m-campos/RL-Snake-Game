@@ -1,16 +1,15 @@
 #include "agent_controller.h"
 
-#include <io.h>
-
 #include <chrono>
 #include <thread>
 
 #include "agent_factory.h"
+#include "game.h"
+#include "game_environment.h"
+#include "io.h"
 
-const std::string AgentController::_filename{"16x16_action_valuer.txt"};
-
-AgentController::AgentController() {
-  auto unique_valuer = io::Load<GameState, snake::Direction>(_filename);
+AgentController::AgentController(const std::string& filename) {
+  auto unique_valuer = io::Load<GameState, snake::Direction>(filename);
   std::shared_ptr<ActionValuer<GameState, snake::Direction>> action_valuer{
       std::move(unique_valuer)};
   _agent = AgentFactory<GameState, snake::Direction>::CreateQAgent(
