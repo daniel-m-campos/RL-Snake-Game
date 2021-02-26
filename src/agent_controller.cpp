@@ -3,6 +3,7 @@
 #include <chrono>
 #include <thread>
 
+#include "SDL.h"
 #include "agent_factory.h"
 #include "game.h"
 #include "game_environment.h"
@@ -18,7 +19,13 @@ AgentController::AgentController(const std::string& filename) {
 }
 
 bool AgentController::Update(Game& game) {
-  std::this_thread::sleep_for(std::chrono::milliseconds(250));
+  SDL_Event e;
+  while (SDL_PollEvent(&e)) {
+    if (e.type == SDL_QUIT) {
+      return false;
+    }
+  }
+  std::this_thread::sleep_for(std::chrono::milliseconds(50));
   auto state = GameState::Create(game);
   auto action = _agent->GetAction(state);
   snake::Snake& snake = game.GetSnake();
