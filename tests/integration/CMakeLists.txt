@@ -13,3 +13,10 @@ target_link_libraries(
         gtest_main
         pthread
 )
+
+add_executable(
+        GUI_TEST
+        gui_test.cpp
+)
+
+target_link_libraries(GUI_TEST ${CURSES_LIBRARIES} gui)

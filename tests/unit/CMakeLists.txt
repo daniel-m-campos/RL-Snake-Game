@@ -11,11 +11,13 @@ add_executable(
         game_environment_test.cpp
         state_action_map_test.cpp
         io_test.cpp
+        menu_tests.cpp
 )
 
 target_link_libraries(
         UNIT_TEST
         snake_game
+        gui
         gtest
         gmock
         gtest_main
