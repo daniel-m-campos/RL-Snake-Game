@@ -28,7 +28,7 @@ struct Position {
         return y > 0 ? Position{x, y - 1} : *this;
       case Move::kEast:
         return x < 4 ? Position{x + 1, y} : *this;
-      case Move::kWest:
+      default:
         return x > 0 ? Position{x - 1, y} : *this;
     }
   }

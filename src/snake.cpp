@@ -18,7 +18,7 @@ Direction snake::GetOpposite(const Direction &direction) {
       return snake::Direction::kDown;
     case snake::Direction::kLeft:
       return snake::Direction::kRight;
-    case snake::Direction::kRight:
+    default:
       return snake::Direction::kLeft;
   }
 }
