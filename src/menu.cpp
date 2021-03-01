@@ -90,8 +90,10 @@ const std::vector<std::string>& ParametersMenu::Options() {
 }
 
 std::unique_ptr<Menu> ParametersMenu::Next(int choice) {
-  if (choice < _parameters.size()) {
+  if (choice < _parameters.size() - 1) {
     _train_bot(_parameters[choice]);
+  }
+  if (choice < _parameters.size()) {
     return _factory->CreateMainMenu();
   }
   return std::unique_ptr<Menu>(nullptr);
