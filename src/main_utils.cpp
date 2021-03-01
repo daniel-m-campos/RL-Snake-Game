@@ -2,10 +2,12 @@
 
 #include <iostream>
 
+#include "action_valuer.h"
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
 #include "snake.h"
+#include "state_action_map.h"
 
 void GameLoop(Game& game, Controller& controller, Renderer& renderer,
               std::size_t target_frame_duration) {
@@ -40,17 +42,17 @@ void GameLoop(Game& game, Controller& controller, Renderer& renderer,
   }
 }
 
-void Play(Controller& controller, std::size_t kGridWidth,
-          std::size_t kGridHeight, std::size_t kFramesPerSecond,
-          std::size_t kScreenWidth, std::size_t kScreenHeight) {
-  std::size_t kMsPerFrame{1000 / kFramesPerSecond};
+void Play(Controller& controller, std::size_t grid_width,
+          std::size_t grid_height, std::size_t frames_per_second,
+          std::size_t screen_width, std::size_t screen_height) {
+  std::size_t ms_per_frame{1000 / frames_per_second};
 
-  Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
-  Game game(kGridWidth, kGridHeight,
-            std::make_unique<snake::GridSnake>(kGridWidth, kGridHeight), 0.1,
+  Renderer renderer(screen_width, screen_height, grid_width, grid_height);
+  Game game(grid_width, grid_height,
+            std::make_unique<snake::GridSnake>(grid_width, grid_height), 0.1,
             0.02);
 
-  GameLoop(game, controller, renderer, kMsPerFrame);
+  GameLoop(game, controller, renderer, ms_per_frame);
 
   Print(game);
 }

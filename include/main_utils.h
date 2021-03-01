@@ -8,9 +8,9 @@
 void GameLoop(Game& game, Controller& controller, Renderer& renderer,
               std::size_t target_frame_duration);
 
-void Play(Controller& controller, std::size_t kGridWidth = 32,
-          std::size_t kGridHeight = 32, std::size_t kFramesPerSecond = 60,
-          std::size_t kScreenWidth = 640, std::size_t kScreenHeight = 640);
+void Play(Controller& controller, std::size_t grid_width = 32,
+          std::size_t grid_height = 32, std::size_t frames_per_second = 60,
+          std::size_t screen_width = 640, std::size_t screen_height = 640);
 
 void Print(const Game& game);
 
