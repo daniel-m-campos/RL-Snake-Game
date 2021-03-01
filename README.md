@@ -1,10 +1,13 @@
 # RL Snake Game
-<img src="snake_game.gif"/>
-
 This is an Reinforcement Learning Snake Game with an NCurses UI for selecting to either:
 1. Play snake yourself.
 1. Watch an RL bot play.
 1. Tran a new RL bot to play, which you can then watch.
+
+## Example
+<p align="center">
+<img src="snake_game.gif"/>
+</p>
 
 The game code for this repo was inspired by [CppND-Capstone-Snake-Game](https://github.com/udacity/CppND-Capstone-Snake-Game).
 
