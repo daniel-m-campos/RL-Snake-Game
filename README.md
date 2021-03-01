@@ -51,7 +51,8 @@ export CXX=g++-9
 ## Code Structure
 
 All `.h` files are in `include`, core `.cpp` files are in `src`, and tests files in `tests`. The tests are a good place
-to see how the entities work in isolation. You need to set the CMake option `-DBUILD_TESTS=YES` to build the tests.
+to see how the entities work in isolation. To build the tests, you need `CMake>=3.14` and to set 
+option `-DBUILD_TESTS=YES`.
 
 ### Reinforcement Learning API
 
