@@ -27,6 +27,7 @@ if (BUILD_TESTS)
             src/game_environment.cpp
             src/game_simulator.cpp
             src/io.cpp
+            src/trainer.cpp
     )
     add_library(
             gui
