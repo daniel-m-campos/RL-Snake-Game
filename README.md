@@ -1,7 +1,6 @@
 # RL Snake Game
 
-This is an Reinforcement Learning Snake Game with an NCurses UI for selecting to either:
-
+This is a Reinforcement Learning Snake Game with an NCurses UI for selecting to either:
 1. Play snake yourself.
 1. Watch an RL bot play.
 1. Train a new RL bot to play, which you can then watch.
