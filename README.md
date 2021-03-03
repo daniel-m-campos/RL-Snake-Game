@@ -1,12 +1,10 @@
 # RL Snake Game
-
 This is a Reinforcement Learning Snake Game with an NCurses UI for selecting to either:
 1. Play snake yourself.
 1. Watch an RL bot play.
 1. Train a new RL bot to play, which you can then watch.
 
 ### Example
-
 <p align="center">
 <img src="snake_game.gif"/>
 </p>
@@ -15,7 +13,6 @@ The game code for this repo was inspired
 by [CppND-Capstone-Snake-Game](https://github.com/udacity/CppND-Capstone-Snake-Game).
 
 ## Dependencies for Running Locally
-
 * cmake >= 3.13
 * All OSes: [click here for installation instructions](https://cmake.org/install/)
 * make >= 4.1 (Linux, Mac)
@@ -30,7 +27,6 @@ by [CppND-Capstone-Snake-Game](https://github.com/udacity/CppND-Capstone-Snake-G
     * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
 
 ### Installing/Upgrading dependencies on Linux
-
 ```bash
 sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 sudo apt update
@@ -41,22 +37,19 @@ export CXX=g++-9
 ```
 
 ### Building
-
 1. Clone this repo.
 2. Make a build directory in the top level directory: `mkdir build && cd build`
 3. Compile: `cmake .. && cmake --build .`
 4. Run it: `./RLSnakeGame`.
 
 ## Code Structure
-
 All `.h` files are in `include`, core `.cpp` files are in `src`, and tests files in `tests`. The tests are a good place
 to see how the entities work in isolation. To build the tests, you need `CMake>=3.14` and to set 
 option `-DBUILD_TESTS=YES`.
 
 ### Reinforcement Learning API
-
-The following files implement a template based API for tabular Reinforcement Learning algorithms. Only the 
-Q-Learning algorithm has been implement but the API supports SARSA and Expected SARSA.
+The following files implement a template based API for tabular Reinforcement Learning. Only the 
+Q-Learning algorithm has been implemented but the API supports SARSA and Expected SARSA.
 1. `include/state_action_map.h`
 1. `include/action_valuer.h`
 1. `include/policy.h`
