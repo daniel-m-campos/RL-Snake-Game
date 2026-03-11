@@ -51,11 +51,11 @@ template <typename T> struct Point
     }
     auto operator<=(Point const &rhs) const -> bool
     {
-        return rhs >= *this;
+        return !(rhs < *this);
     }
     auto operator>=(Point const &rhs) const -> bool
     {
-        return *this >= rhs;
+        return !(*this < rhs);
     }
 };
 
@@ -83,19 +83,16 @@ class Snake
 };
 
 inline float constexpr initial_snake_speed{0.1F};
-inline float constexpr grid_center_divisor{2.0F};
 
-// NOLINTBEGIN(bugprone-easily-swappable-parameters)
 class GridSnake : public Snake
 {
   public:
     GridSnake(int grid_width, int grid_height)
         : _grid_width(grid_width), _grid_height(grid_height),
-          _head_x(static_cast<float>(grid_width) / grid_center_divisor),
-          _head_y(static_cast<float>(grid_height) / grid_center_divisor)
+          _head_x(static_cast<float>(grid_width / 2)),
+          _head_y(static_cast<float>(grid_height / 2))
     {
     }
-    // NOLINTEND(bugprone-easily-swappable-parameters)
 
     void update() override;
     void grow_body() override;
@@ -112,9 +109,7 @@ class GridSnake : public Snake
 
   private:
     void update_head();
-    // NOLINTBEGIN(bugprone-easily-swappable-parameters)
     void update_body(Point<int> &current_cell, Point<int> &prev_cell);
-    // NOLINTEND(bugprone-easily-swappable-parameters)
 
     bool _growing{false};
     int _grid_width;

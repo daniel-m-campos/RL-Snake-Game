@@ -51,10 +51,6 @@ auto io::load(std::string const &filename)
         while (getline(file, line))
         {
             auto [state, direction, value] = read_line(line);
-            if (value == 0)
-            {
-                continue;
-            }
             state_action_dict[state].push_back(direction);
             action_value_dict[{state, direction}] = value;
         }

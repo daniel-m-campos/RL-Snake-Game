@@ -54,15 +54,15 @@ StateActionHashMap<S, A>::StateActionHashMap(StateActionHashMap::state_action_ma
 }
 
 template <typename S, typename A>
-std::vector<S> const &StateActionHashMap<S, A>::get_states()
+auto StateActionHashMap<S, A>::get_states() -> std::vector<S> const &
 {
     if (_states.empty())
     {
         for (auto const &[state, actions] : _state_actions)
         {
             _states.push_back(state);
-            std::sort(_states.begin(), _states.end());
         }
+        std::sort(_states.begin(), _states.end());
     }
     return _states;
 }
@@ -70,7 +70,13 @@ std::vector<S> const &StateActionHashMap<S, A>::get_states()
 template <typename S, typename A>
 std::vector<A> const &StateActionHashMap<S, A>::get_actions(S state)
 {
-    return _state_actions.at(state);
+    auto const it = _state_actions.find(state);
+    if (it == _state_actions.end())
+    {
+        static std::vector<A> const empty_actions{};
+        return empty_actions;
+    }
+    return it->second;
 }
 
 template <typename S, typename A>

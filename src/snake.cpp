@@ -74,10 +74,8 @@ void GridSnake::update_head()
                     static_cast<float>(_grid_height));
 }
 
-// NOLINTBEGIN(bugprone-easily-swappable-parameters)
 void GridSnake::update_body(Point<int> &current_cell, Point<int> &prev_cell)
 {
-    // NOLINTEND(bugprone-easily-swappable-parameters)
     // Add previous head location to vector
     _body.push_back(prev_cell);
 

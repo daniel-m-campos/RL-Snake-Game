@@ -52,7 +52,7 @@ void save(std::string const &filename, ActionValuer<S, A> &action_valuer,
     }
 }
 
-std::tuple<GameState, snake::Direction, double> read_line(std::string &line);
+auto read_line(std::string &line) -> std::tuple<GameState, snake::Direction, double>;
 
 template <typename S, typename A>
 auto load(std::string const &filename) -> std::unique_ptr<ActionValuer<S, A>>;

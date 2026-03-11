@@ -1,105 +1,148 @@
 # RL Snake Game
-This is a Reinforcement Learning Snake Game with an NCurses UI for selecting to either:
+
+A Reinforcement Learning Snake Game written in modern C++23. An NCurses terminal menu lets you:
+
 1. Play snake yourself.
-1. Watch an RL bot play.
-1. Train a new RL bot to play, which you can then watch.
+2. Watch a trained RL bot play.
+3. Train a new RL bot, then watch it play.
 
 ### Example
+
 <p align="center">
 <img src="snake_game.gif"/>
 </p>
 
-The game code for this repo was inspired
-by [CppND-Capstone-Snake-Game](https://github.com/udacity/CppND-Capstone-Snake-Game).
+The original snake game code was inspired by [CppND-Capstone-Snake-Game](https://github.com/udacity/CppND-Capstone-Snake-Game).
 
-## Dependencies for Running Locally
-* cmake >= 3.13
-* All OSes: [click here for installation instructions](https://cmake.org/install/)
-* make >= 4.1 (Linux, Mac)
-    * Linux: make is installed by default on most Linux distros
-    * Mac: [install Xcode command line tools to get make](https://developer.apple.com/xcode/features/)
-* SDL2 >= 2.0
-    * All installation instructions can be found [here](https://wiki.libsdl.org/Installation)
-    * Note that for Linux, an `apt` or `apt-get` installation is preferred to building from source.
-* NCurses >= 6.1
-* gcc/g++ >= 9.3
-    * Linux: gcc / g++ is installed by default on most Linux distros
-    * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
+---
 
-### Installing/Upgrading dependencies on Linux
+## Dependencies
+
+| Dependency | Version | Notes |
+|---|---|---|
+| CMake | >= 3.28 | [Installation instructions](https://cmake.org/install/) |
+| make | >= 4.1 | Linux/Mac |
+| SDL2 | >= 2.0 | [Installation instructions](https://wiki.libsdl.org/Installation) |
+| NCurses | >= 6.1 | |
+| gcc/g++ or clang++ | C++23 support required | |
+| GoogleTest | v1.15.2 | Fetched automatically via CMake `FetchContent` (tests only) |
+
+### Installing dependencies on Linux
+
 ```bash
 sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 sudo apt update
-sudo apt install libncurses5-dev libncursesw5-dev
-sudo apt install -y gcc-9 g++-9
-export CC=gcc-9
-export CXX=g++-9
+sudo apt install libsdl2-dev libncurses5-dev libncursesw5-dev
+sudo apt install -y gcc-13 g++-13
+export CC=gcc-13
+export CXX=g++-13
 ```
 
-### Building
-1. Clone this repo.
-2. Make a build directory in the top level directory: `mkdir build && cd build`
-3. Compile: `cmake .. && cmake --build .`
-4. Run it: `./RLSnakeGame`.
+### Installing dependencies on macOS
+
+```bash
+brew install cmake sdl2 ncurses llvm
+```
+
+---
+
+## Building
+
+```bash
+# 1. Clone the repo
+git clone <repo-url> && cd RL-Snake-Game
+
+# 2. Configure and build
+cmake -S . -B build
+cmake --build build
+
+# 3. Run
+./bin/RLSnakeGame
+```
+
+### Building with tests
+
+GoogleTest is fetched automatically by CMake — no manual installation needed.
+
+```bash
+mkdir build && cd build
+cmake .. -DBUILD_TESTS=ON && cmake --build .
+ctest --output-on-failure
+```
+
+---
+
+## Training
+
+Training runs for 1,000 episodes by default using Q-Learning with ε-greedy exploration:
+
+| Parameter | Default |
+|---|---|
+| Episodes | 1,000 |
+| Max steps per episode | 1,000,000 |
+| Epsilon (ε-greedy) | 0.5 |
+| Discount factor (γ) | 0.9 |
+| Step size (α) | 0.5 |
+
+Trained Q-value tables are saved to disk and loaded automatically when you select "Watch bot play."
+
+---
 
 ## Code Structure
-All `.h` files are in `include`, core `.cpp` files are in `src`, and tests files in `tests`. The tests are a good place
-to see how the entities work in isolation. To build the tests, you need `CMake>=3.14` and to set 
-option `-DBUILD_TESTS=YES`.
+
+Headers are in `include/`, source files in `src/`, and tests in `tests/`.
 
 ### Reinforcement Learning API
-The following files implement a template based API for tabular Reinforcement Learning. Only the 
-Q-Learning algorithm has been implemented but the API supports SARSA and Expected SARSA.
-1. `include/state_action_map.h`
-1. `include/action_valuer.h`
-1. `include/policy.h`
-1. `include/agent.h`
-1. `include/learner.h`
-1. `include/environment.h`
-1. `include/simulator.h`
 
-### Snake Game refactored for RL simulations
-1. `include/controller.h`
-1. `include/key_board_controller.h`
-1. `src/keyboard_controller.h`
-1. `include/food.h`
-1. `src/food.cpp`
-1. `include/snake.h`
-1. `src/snake.cpp`
-1. `include/game.h`
-1. `src/game.cpp`
-1. `include/renderer.h`
-1. `src/renderer.cpp`
+Template-based tabular RL API. Q-Learning is fully implemented; the interface also supports SARSA and Expected SARSA.
+
+| File | Description |
+|---|---|
+| `include/state_action_map.h` | Maps (state, action) pairs to Q-values |
+| `include/action_valuer.h` | Interface for Q-value lookup and update |
+| `include/policy.h` | Policy interface (ε-greedy implemented) |
+| `include/agent.h` | `Agent` interface and `AgentImpl` |
+| `include/learner.h` | `Learner` interface and `QLearner` |
+| `include/environment.h` | Environment interface |
+| `include/simulator.h` | Runs agent–environment interaction loops |
+
+### Snake Game
+
+| File | Description |
+|---|---|
+| `include/snake.h` / `src/snake.cpp` | Snake entity |
+| `include/food.h` / `src/food.cpp` | Food placement |
+| `include/game.h` / `src/game.cpp` | Core game logic |
+| `include/game_environment.h` / `src/game_environment.cpp` | Wraps the game as an RL `Environment` |
+| `include/game_simulator.h` / `src/game_simulator.cpp` | Runs RL simulation over the game |
+| `include/controller.h` | Controller interface |
+| `include/keyboard_controller.h` / `src/keyboard_controller.cpp` | Human keyboard input |
+| `include/agent_controller.h` / `src/agent_controller.cpp` | Bot controller driven by the RL agent |
+| `include/renderer.h` / `src/renderer.cpp` | SDL2 rendering |
 
 ### NCurses UI
-1. `include/menu.h`
-1. `src/menu.cpp`
-1. `include/game_menu_factory.h`
-1. `src/game_menu_factory.cpp`
-1. `include/gui.h`
-1. `src/gui.cpp`
 
-### IO for saving and loading Bot RL behavior
-1. `include/io.h`
-1. `src/io.cpp`
+| File | Description |
+|---|---|
+| `include/menu.h` / `src/menu.cpp` | Generic menu component |
+| `include/game_menu_factory.h` / `src/game_menu_factory.cpp` | Builds the main game menu |
+| `include/gui.h` / `src/gui.cpp` | Top-level NCurses GUI |
 
-### Main
-1. `include/mail_utils.h`
-1. `src/mail_utils.cpp`
-1. `include/trainer.h`
-1. `src/trainer.cpp`
-1. `src/main.cpp`
+### IO
 
-### All else
-The rest of the code are either factories for assembling the entities or wiring the snake game with the RL 
-algorithms and the gui.
+| File | Description |
+|---|---|
+| `include/io.h` / `src/io.cpp` | Save and load trained Q-value tables |
 
-## Rubric Points Satisfied
-1. Loops, Functions, I/O: All
-1. Object Oriented Programming: All
-1. Memory Management: 
-    1. The project makes use of references in function declarations.
-    1. The project uses move semantics to move data, instead of copying it, where possible.
-    1. The project uses smart pointers instead of raw pointers.
-1. Concurrency: None
-       
+### Entry Point
+
+| File | Description |
+|---|---|
+| `include/trainer.h` / `src/trainer.cpp` | Orchestrates training runs |
+| `include/main_utils.h` / `src/main_utils.cpp` | Startup helpers |
+| `src/main.cpp` | `main()` — launches the NCurses GUI |
+
+### Factories
+
+`include/agent_factory.h` and `include/action_valuer_factory.h` assemble RL components, and adapter classes wire the snake game to the RL algorithms and GUI.
+
