@@ -6,13 +6,33 @@ A Reinforcement Learning Snake Game written in modern C++23. An NCurses terminal
 2. Watch a trained RL bot play.
 3. Train a new RL bot, then watch it play.
 
-### Example
+### Demo
 
-<p align="center">
-<img src="snake_game.gif"/>
-</p>
+[YouTube Demo](https://www.youtube.com/watch?v=IN6iX37QIdg)
 
 The original snake game code was inspired by [CppND-Capstone-Snake-Game](https://github.com/udacity/CppND-Capstone-Snake-Game).
+
+---
+
+## MPCS-51044
+
+### New Work
+
+All commits since [`8211e59`](../../commit/8211e596bab1ecc3c26f90fe3195a6720076172a) represent the new work for this submission and should be graded. These commits include:
+
+- **`0c215c3`** build: modernize CMake to C++23 and upgrade dependencies
+- **`8bc47a7`** refactor: fix compiler warnings and modernize test code
+- **`6db1187`** fix: resolve correctness bugs and update documentation
+- **`96c63ea`** perf(io): replace text CSV serialization with binary format
+- **`20eada9`** refactor: modernize codebase to C++23 best practices
+- **`fac7227`** feat: add parallel training engine with ncurses dashboard
+- **`712e512`** perf(training): replace per-chunk thread creation with persistent thread pool
+
+### AI Tooling
+
+Claude Code was used with plan mode for various features in a similar fashion to how the professor demonstrated in [this video](https://youtu.be/aXPTzc9BLps?si=T1ZdNvqT5U07q5cS). Plan mode was used to research the codebase, design implementation strategies, and then execute changes — including the parallel training engine, binary serialization, C++23 modernization, and the NCurses dashboard.
+
+
 
 ---
 
