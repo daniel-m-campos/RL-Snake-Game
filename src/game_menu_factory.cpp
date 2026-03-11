@@ -18,7 +18,7 @@
 
 auto GameMenuFactory::create_main_menu() -> std::unique_ptr<Menu>
 {
-    return std::make_unique<MainMenu>(this,
+    return std::make_unique<MainMenu>(*this,
                                       []()
                                       {
                                           auto controller = KeyboardController();
@@ -28,12 +28,12 @@ auto GameMenuFactory::create_main_menu() -> std::unique_ptr<Menu>
 
 auto GameMenuFactory::create_watch_menu() -> std::unique_ptr<Menu>
 {
-    return std::make_unique<WatchMenu>(this);
+    return std::make_unique<WatchMenu>(*this);
 }
 
 auto GameMenuFactory::create_train_menu() -> std::unique_ptr<Menu>
 {
-    return std::make_unique<TrainMenu>(this);
+    return std::make_unique<TrainMenu>(*this);
 }
 
 auto GameMenuFactory::create_select_bot_menu() -> std::unique_ptr<Menu>
@@ -51,7 +51,7 @@ auto GameMenuFactory::create_select_bot_menu() -> std::unique_ptr<Menu>
         auto [width, height] = get_grid_size(filename);
         play(controller, width, height);
     };
-    return std::make_unique<SelectBotMenu>(this, choices, watch_bot);
+    return std::make_unique<SelectBotMenu>(*this, choices, watch_bot);
 }
 
 auto GameMenuFactory::create_parameters_menu() -> std::unique_ptr<Menu>
@@ -63,7 +63,7 @@ auto GameMenuFactory::create_parameters_menu() -> std::unique_ptr<Menu>
         train(width, height, training_episodes);
     };
     return std::make_unique<ParametersMenu>(
-        this, std::vector<std::string>{"8x8", "16x16", "24x24", "32x32"}, train_bot);
+        *this, std::vector<std::string>{"8x8", "16x16", "24x24", "32x32"}, train_bot);
 }
 
 auto GameMenuFactory::get_grid_size(std::string const &filename)

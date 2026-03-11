@@ -1,5 +1,4 @@
-#ifndef RLSNAKEGAME_GRIDWORLD_H
-#define RLSNAKEGAME_GRIDWORLD_H
+#pragma once
 
 #include <memory>
 #include <unordered_map>
@@ -70,13 +69,11 @@ class GridWorld : public Environment<Position, Move>
 {
   public:
     void update(Move const &action) override;
-    Position const &get_state() override;
-    double get_reward() override;
-    bool has_terminated() override;
+    [[nodiscard]] Position const &get_state() const override;
+    [[nodiscard]] double get_reward() const override;
+    [[nodiscard]] bool has_terminated() const override;
 
   private:
     Position _position;
     double _reward{0};
 };
-
-#endif // RLSNAKEGAME_GRIDWORLD_H

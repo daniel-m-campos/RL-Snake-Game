@@ -21,25 +21,25 @@ snake::Point<int> const &Food::get_location() const
     return _location;
 }
 
-auto Food::try_feed(snake::Snake *snake) -> bool
+auto Food::try_feed(snake::Snake &snake) -> bool
 {
-    int new_x = static_cast<int>(snake->get_head_x());
-    int new_y = static_cast<int>(snake->get_head_y());
+    int new_x = static_cast<int>(snake.get_head_x());
+    int new_y = static_cast<int>(snake.get_head_y());
     if (_location.x == new_x && _location.y == new_y)
     {
-        snake->grow_body();
+        snake.grow_body();
         place_food(snake);
         return true;
     }
     return false;
 }
 
-void Food::place_food(snake::Snake *snake)
+void Food::place_food(snake::Snake &snake)
 {
     while (true)
     {
         auto new_location = sample_location();
-        if (!snake->snake_cell(new_location.x, new_location.y))
+        if (!snake.snake_cell(new_location.x, new_location.y))
         {
             _location = new_location;
             return;

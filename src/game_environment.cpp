@@ -4,7 +4,6 @@
 #include "snake.h"
 #include <memory>
 #include <ostream>
-#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -18,36 +17,6 @@ double constexpr feed_reward{1.0};
 GameEnvironment::GameEnvironment(std::unique_ptr<Game> game) : _game{std::move(game)}
 {
     update_game_state();
-}
-
-auto GameState::operator==(GameState const &rhs) const -> bool
-{
-    return std::tie(body_to_food) == std::tie(rhs.body_to_food);
-}
-
-auto GameState::operator!=(GameState const &rhs) const -> bool
-{
-    return !(rhs == *this);
-}
-
-auto GameState::operator<(GameState const &rhs) const -> bool
-{
-    return std::tie(body_to_food) < std::tie(rhs.body_to_food);
-}
-
-auto GameState::operator>(GameState const &rhs) const -> bool
-{
-    return rhs < *this;
-}
-
-auto GameState::operator<=(GameState const &rhs) const -> bool
-{
-    return !(rhs < *this);
-}
-
-auto GameState::operator>=(GameState const &rhs) const -> bool
-{
-    return !(*this < rhs);
 }
 
 auto GameState::create(Game &game) -> GameState
@@ -106,17 +75,17 @@ void GameEnvironment::update_game_state()
     _state = GameState::create(*_game);
 }
 
-GameState const &GameEnvironment::get_state()
+GameState const &GameEnvironment::get_state() const
 {
     return _state;
 }
 
-auto GameEnvironment::get_reward() -> double
+auto GameEnvironment::get_reward() const -> double
 {
     return _reward;
 }
 
-auto GameEnvironment::has_terminated() -> bool
+auto GameEnvironment::has_terminated() const -> bool
 {
     return !_alive;
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <compare>
 #include <cstddef>
 #include <functional>
 #include <memory>
@@ -14,13 +15,9 @@
 struct GameState
 {
     std::vector<snake::Point<int>> body_to_food;
-    static auto create(Game &game) -> GameState;
-    auto operator==(GameState const &rhs) const -> bool;
-    auto operator!=(GameState const &rhs) const -> bool;
-    auto operator<(GameState const &rhs) const -> bool;
-    auto operator>(GameState const &rhs) const -> bool;
-    auto operator<=(GameState const &rhs) const -> bool;
-    auto operator>=(GameState const &rhs) const -> bool;
+    [[nodiscard]] static auto create(Game &game) -> GameState;
+    auto operator<=>(GameState const &) const        = default;
+    auto operator==(GameState const &) const -> bool = default;
     friend auto operator<<(std::ostream &os,
                            GameState const &state)
         -> std::ostream &; // NOLINT(google-objc-function-naming)
@@ -45,9 +42,9 @@ class GameEnvironment : public Environment<GameState, snake::Direction>
   public:
     explicit GameEnvironment(std::unique_ptr<Game> game);
     void update(snake::Direction const &action) override;
-    auto get_state() -> GameState const & override;
-    auto get_reward() -> double override;
-    auto has_terminated() -> bool override;
+    [[nodiscard]] auto get_state() const -> GameState const & override;
+    [[nodiscard]] auto get_reward() const -> double override;
+    [[nodiscard]] auto has_terminated() const -> bool override;
 
   private:
     double _reward{0};

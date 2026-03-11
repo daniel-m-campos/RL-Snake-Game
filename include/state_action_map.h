@@ -1,6 +1,7 @@
 #pragma once
 #include <algorithm>
 #include <set>
+#include <span>
 #include <unordered_map>
 #include <vector>
 
@@ -36,14 +37,13 @@ class SimpleStateActionMap : public StateActionMap<S, A>
 {
   public:
     SimpleStateActionMap() = delete;
-    explicit SimpleStateActionMap(std::set<S> states, std::set<A> actions);
+    explicit SimpleStateActionMap(std::set<S> states, std::span<A const> actions);
     auto get_states() -> std::vector<S> const & override;
     auto get_actions(S state) -> std::vector<A> const & override;
 
   private:
     std::set<S> _states;
     std::vector<S> _unique_states;
-    std::set<A> _actions;
     std::vector<A> _unique_actions;
 };
 
@@ -81,10 +81,9 @@ std::vector<A> const &StateActionHashMap<S, A>::get_actions(S state)
 
 template <typename S, typename A>
 SimpleStateActionMap<S, A>::SimpleStateActionMap(std::set<S> states,
-                                                 std::set<A> actions)
-    : _states{states}, _actions{actions}
+                                                 std::span<A const> actions)
+    : _states{std::move(states)}, _unique_actions{actions.begin(), actions.end()}
 {
-    std::copy(_actions.begin(), _actions.end(), std::back_inserter(_unique_actions));
 }
 
 template <typename S, typename A>

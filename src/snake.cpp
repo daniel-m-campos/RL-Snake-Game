@@ -68,13 +68,13 @@ void GridSnake::update_head()
     }
 
     // Wrap the GridSnake around to the beginning if going off of the screen.
-    _head_x = fmodf(_head_x + static_cast<float>(_grid_width),
-                    static_cast<float>(_grid_width));
-    _head_y = fmodf(_head_y + static_cast<float>(_grid_height),
-                    static_cast<float>(_grid_height));
+    _head_x = std::fmod(_head_x + static_cast<float>(_grid_width),
+                        static_cast<float>(_grid_width));
+    _head_y = std::fmod(_head_y + static_cast<float>(_grid_height),
+                        static_cast<float>(_grid_height));
 }
 
-void GridSnake::update_body(Point<int> &current_cell, Point<int> &prev_cell)
+void GridSnake::update_body(Point<int> const &current_cell, Point<int> const &prev_cell)
 {
     // Add previous head location to vector
     _body.push_back(prev_cell);
@@ -91,9 +91,9 @@ void GridSnake::update_body(Point<int> &current_cell, Point<int> &prev_cell)
     }
 
     // Check if the snake has died.
-    _alive =
-        !std::any_of(_body.begin(), _body.end(), [&current_cell](Point<int> const &item)
-                     { return current_cell.x == item.x && current_cell.y == item.y; });
+    _alive = !std::ranges::any_of(
+        _body, [&current_cell](Point<int> const &item)
+        { return current_cell.x == item.x && current_cell.y == item.y; });
 }
 
 void GridSnake::grow_body()
@@ -108,8 +108,8 @@ bool GridSnake::snake_cell(int x, int y) const
     {
         return true;
     }
-    return std::any_of(_body.begin(), _body.end(), [x, y](Point<int> const &item)
-                       { return x == item.x && y == item.y; });
+    return std::ranges::any_of(_body, [x, y](Point<int> const &item)
+                               { return x == item.x && y == item.y; });
 }
 
 size_t GridSnake::size() const

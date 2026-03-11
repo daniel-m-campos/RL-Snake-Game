@@ -7,13 +7,25 @@
 #include "menu.h"
 #include "ncurses.h"
 
-auto menu_choice(WINDOW *menu_window, std::vector<std::string> const &choices) -> int;
+// RAII wrapper for ncurses WINDOW*
+struct NcursesWinDeleter
+{
+    void operator()(WINDOW *w) const
+    {
+        delwin(w);
+    }
+};
+using NcursesWinPtr = std::unique_ptr<WINDOW, NcursesWinDeleter>;
 
-auto get_max(WINDOW *window) -> std::pair<int, int>;
+[[nodiscard]] auto menu_choice(WINDOW &menu_window,
+                               std::vector<std::string> const &choices) -> int;
 
-auto make_title(std::string const &title, int color_pair) -> WINDOW *;
+[[nodiscard]] auto get_max(WINDOW *window) -> std::pair<int, int>;
 
-auto make_menu(int height, int color_pair) -> WINDOW *;
+[[nodiscard]] auto make_title(std::string const &title, int color_pair)
+    -> NcursesWinPtr;
+
+[[nodiscard]] auto make_menu(int height, int color_pair) -> NcursesWinPtr;
 
 class GUI
 {

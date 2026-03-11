@@ -1,10 +1,10 @@
 #pragma once
 
+#include <array>
+#include <compare>
 #include <cstddef>
 #include <cstdint>
 #include <ostream>
-#include <set>
-#include <tuple>
 #include <vector>
 
 namespace snake
@@ -20,9 +20,9 @@ enum class Direction : std::uint8_t
 
 auto operator<<(std::ostream &os, Direction action) -> std::ostream &;
 
-auto get_opposite(Direction const &) -> Direction;
+[[nodiscard]] auto get_opposite(Direction const &) -> Direction;
 
-std::set<Direction> const directions{
+inline std::array<Direction, 4> constexpr directions{
     Direction::kUp,
     Direction::kDown,
     Direction::kLeft,
@@ -33,53 +33,31 @@ template <typename T> struct Point
 {
     T x;
     T y;
-    auto operator==(Point const &rhs) const -> bool
-    {
-        return std::tie(x, y) == std::tie(rhs.x, rhs.y);
-    }
-    auto operator!=(Point const &rhs) const -> bool
-    {
-        return rhs != *this;
-    }
-    auto operator<(Point const &rhs) const -> bool
-    {
-        return std::tie(x, y) < std::tie(rhs.x, rhs.y);
-    }
-    auto operator>(Point const &rhs) const -> bool
-    {
-        return rhs < *this;
-    }
-    auto operator<=(Point const &rhs) const -> bool
-    {
-        return !(rhs < *this);
-    }
-    auto operator>=(Point const &rhs) const -> bool
-    {
-        return !(*this < rhs);
-    }
+    auto operator<=>(Point const &) const        = default;
+    auto operator==(Point const &) const -> bool = default;
 };
 
 class Snake
 {
   public:
-    Snake()                                                 = default;
-    Snake(Snake const &)                                    = delete;
-    auto operator=(Snake const &) -> Snake &                = delete;
-    Snake(Snake &&)                                         = default;
-    auto operator=(Snake &&) -> Snake &                     = default;
-    virtual ~Snake()                                        = default;
-    virtual void update()                                   = 0;
-    virtual void grow_body()                                = 0;
-    virtual auto snake_cell(int x, int y) const -> bool     = 0;
-    virtual auto size() const -> size_t                     = 0;
-    virtual auto get_direction() const -> Direction         = 0;
-    virtual void set_direction(Direction direction)         = 0;
-    virtual auto is_alive() const -> bool                   = 0;
-    virtual auto get_head_x() const -> float                = 0;
-    virtual auto get_head_y() const -> float                = 0;
-    virtual auto get_speed() const -> float                 = 0;
-    virtual void set_speed(float speed)                     = 0;
-    virtual std::vector<Point<int>> const &get_body() const = 0;
+    Snake()                                                               = default;
+    Snake(Snake const &)                                                  = delete;
+    auto operator=(Snake const &) -> Snake &                              = delete;
+    Snake(Snake &&)                                                       = default;
+    auto operator=(Snake &&) -> Snake &                                   = default;
+    virtual ~Snake()                                                      = default;
+    virtual void update()                                                 = 0;
+    virtual void grow_body()                                              = 0;
+    [[nodiscard]] virtual auto snake_cell(int x, int y) const -> bool     = 0;
+    [[nodiscard]] virtual auto size() const -> size_t                     = 0;
+    [[nodiscard]] virtual auto get_direction() const -> Direction         = 0;
+    virtual void set_direction(Direction direction)                       = 0;
+    [[nodiscard]] virtual auto is_alive() const -> bool                   = 0;
+    [[nodiscard]] virtual auto get_head_x() const -> float                = 0;
+    [[nodiscard]] virtual auto get_head_y() const -> float                = 0;
+    [[nodiscard]] virtual auto get_speed() const -> float                 = 0;
+    virtual void set_speed(float speed)                                   = 0;
+    [[nodiscard]] virtual std::vector<Point<int>> const &get_body() const = 0;
 };
 
 inline float constexpr initial_snake_speed{0.1F};
@@ -96,20 +74,20 @@ class GridSnake : public Snake
 
     void update() override;
     void grow_body() override;
-    auto snake_cell(int x, int y) const -> bool override;
-    auto size() const -> size_t override;
-    auto get_direction() const -> Direction override;
+    [[nodiscard]] auto snake_cell(int x, int y) const -> bool override;
+    [[nodiscard]] auto size() const -> size_t override;
+    [[nodiscard]] auto get_direction() const -> Direction override;
     void set_direction(Direction direction) override;
-    auto is_alive() const -> bool override;
-    auto get_head_x() const -> float override;
-    auto get_head_y() const -> float override;
-    auto get_speed() const -> float override;
+    [[nodiscard]] auto is_alive() const -> bool override;
+    [[nodiscard]] auto get_head_x() const -> float override;
+    [[nodiscard]] auto get_head_y() const -> float override;
+    [[nodiscard]] auto get_speed() const -> float override;
     void set_speed(float speed) override;
-    auto get_body() const -> std::vector<Point<int>> const & override;
+    [[nodiscard]] auto get_body() const -> std::vector<Point<int>> const & override;
 
   private:
     void update_head();
-    void update_body(Point<int> &current_cell, Point<int> &prev_cell);
+    void update_body(Point<int> const &current_cell, Point<int> const &prev_cell);
 
     bool _growing{false};
     int _grid_width;

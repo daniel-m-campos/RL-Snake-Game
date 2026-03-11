@@ -12,8 +12,8 @@ TEST(FoodTest, TestTryFeedSnake)
     Food food{static_cast<size_t>(grid_width), static_cast<size_t>(grid_height),
               location};
     GridSnake snake{grid_width, grid_height};
-    EXPECT_TRUE(food.try_feed(&snake));
-    EXPECT_FALSE(food.try_feed(&snake));
+    EXPECT_TRUE(food.try_feed(snake));
+    EXPECT_FALSE(food.try_feed(snake));
 }
 
 TEST(FoodTest, TestGetLocation)

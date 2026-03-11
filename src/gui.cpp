@@ -8,9 +8,9 @@
 
 #include "ncurses.h"
 
-auto menu_choice(WINDOW *menu_window, std::vector<std::string> const &choices) -> int
+auto menu_choice(WINDOW &menu_window, std::vector<std::string> const &choices) -> int
 {
-    keypad(menu_window, true);
+    keypad(&menu_window, true);
     curs_set(0);
     int choice{0};
     int highlight = 0;
@@ -20,13 +20,13 @@ auto menu_choice(WINDOW *menu_window, std::vector<std::string> const &choices) -
         {
             if (static_cast<int>(i) == highlight)
             {
-                wattron(menu_window, A_REVERSE);
+                wattron(&menu_window, A_REVERSE);
             }
             // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
-            mvwprintw(menu_window, static_cast<int>(i) + 1, 1, choices[i].c_str());
-            wattroff(menu_window, A_REVERSE);
+            mvwprintw(&menu_window, static_cast<int>(i) + 1, 1, choices[i].c_str());
+            wattroff(&menu_window, A_REVERSE);
         }
-        choice = wgetch(menu_window);
+        choice = wgetch(&menu_window);
         switch (choice)
         {
         case KEY_UP:
@@ -56,30 +56,30 @@ std::pair<int, int> get_max(WINDOW *window)
     int y_max{0};
     int x_max{0};
     getmaxyx(window, y_max, x_max);
-    return std::make_pair(y_max, x_max);
+    return {y_max, x_max};
 }
 
-auto make_title(std::string const &title, int color_pair) -> WINDOW *
+auto make_title(std::string const &title, int color_pair) -> NcursesWinPtr
 {
     auto [y_max, x_max] = get_max(stdscr);
-    WINDOW *window      = newwin(3, x_max, 0, 0);
-    wbkgd(window, COLOR_PAIR(color_pair));
-    box(window, 0, 0);
+    NcursesWinPtr window{newwin(3, x_max, 0, 0)};
+    wbkgd(window.get(), COLOR_PAIR(color_pair));
+    box(window.get(), 0, 0);
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
-    mvwprintw(window, 1, 1, title.c_str());
+    mvwprintw(window.get(), 1, 1, title.c_str());
     refresh();
-    wrefresh(window);
+    wrefresh(window.get());
     return window;
 }
 
-auto make_menu(int height, int color_pair) -> WINDOW *
+auto make_menu(int height, int color_pair) -> NcursesWinPtr
 {
     auto [y_max, x_max] = get_max(stdscr);
-    WINDOW *window      = newwin(height + 2, x_max, 3, 0);
-    wbkgd(window, COLOR_PAIR(color_pair));
-    box(window, 0, 0);
+    NcursesWinPtr window{newwin(height + 2, x_max, 3, 0)};
+    wbkgd(window.get(), COLOR_PAIR(color_pair));
+    box(window.get(), 0, 0);
     refresh();
-    wrefresh(window);
+    wrefresh(window.get());
     return window;
 }
 
@@ -110,11 +110,10 @@ void GUI::show()
     int color_pair = 0;
     while (menu)
     {
-        make_title(menu->title(), color_pair);
-        WINDOW *menu_window =
-            make_menu(static_cast<int>(menu->options().size()), color_pair);
+        auto title_win = make_title(menu->title(), color_pair);
+        auto menu_win = make_menu(static_cast<int>(menu->options().size()), color_pair);
         refresh();
-        int choice = menu_choice(menu_window, menu->options());
+        int choice = menu_choice(*menu_win, menu->options());
         menu       = menu->next(choice);
         ++color_pair %= 3;
     }

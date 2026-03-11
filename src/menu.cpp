@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-MainMenu::MainMenu(MenuFactory *factory, std::function<void(void)> snake_game)
+MainMenu::MainMenu(MenuFactory &factory, std::function<void(void)> snake_game)
     : _factory{factory}, _snake_game{std::move(snake_game)}
 {
 }
@@ -16,11 +16,11 @@ std::unique_ptr<Menu> MainMenu::next(int choice)
     {
     case 0:
         _snake_game();
-        return _factory->create_main_menu();
+        return _factory.create_main_menu();
     case 1:
-        return _factory->create_watch_menu();
+        return _factory.create_watch_menu();
     case 2:
-        return _factory->create_train_menu();
+        return _factory.create_train_menu();
     default:
         return {nullptr};
     }
@@ -36,7 +36,7 @@ std::vector<std::string> const &MainMenu::options()
     return _options;
 }
 
-WatchMenu::WatchMenu(MenuFactory *factory) : _factory{factory} {}
+WatchMenu::WatchMenu(MenuFactory &factory) : _factory{factory} {}
 
 std::string const &WatchMenu::title()
 {
@@ -52,15 +52,15 @@ std::unique_ptr<Menu> WatchMenu::next(int choice)
     switch (choice)
     {
     case 0:
-        return _factory->create_select_bot_menu();
+        return _factory.create_select_bot_menu();
     case 1:
-        return _factory->create_main_menu();
+        return _factory.create_main_menu();
     default:
         return {nullptr};
     }
 }
 
-SelectBotMenu::SelectBotMenu(MenuFactory *factory, std::vector<std::string> bots,
+SelectBotMenu::SelectBotMenu(MenuFactory &factory, std::vector<std::string> bots,
                              std::function<void(std ::string const &)> watch_bot)
     : _factory{factory}, _bots{std::move(bots)}, _watch_bot{std::move(watch_bot)}
 {
@@ -81,12 +81,12 @@ std::unique_ptr<Menu> SelectBotMenu::next(int choice)
     if (choice < static_cast<int>(_bots.size()))
     {
         _watch_bot(_bots[choice]);
-        return _factory->create_main_menu();
+        return _factory.create_main_menu();
     }
     return {nullptr};
 }
 
-TrainMenu::TrainMenu(MenuFactory *factory) : _factory{factory} {}
+TrainMenu::TrainMenu(MenuFactory &factory) : _factory{factory} {}
 
 std::string const &TrainMenu::title()
 {
@@ -103,15 +103,15 @@ auto TrainMenu::next(int choice) -> std::unique_ptr<Menu>
     switch (choice)
     {
     case 0:
-        return _factory->create_parameters_menu();
+        return _factory.create_parameters_menu();
     case 1:
-        return _factory->create_main_menu();
+        return _factory.create_main_menu();
     default:
         return {nullptr};
     }
 }
 
-ParametersMenu::ParametersMenu(MenuFactory *factory,
+ParametersMenu::ParametersMenu(MenuFactory &factory,
                                std::vector<std::string> parameters,
                                std::function<void(std::string const &)> train_bot)
     : _factory{factory}, _parameters{std::move(parameters)},
@@ -138,7 +138,7 @@ std::unique_ptr<Menu> ParametersMenu::next(int choice)
     }
     if (choice < static_cast<int>(_parameters.size()))
     {
-        return _factory->create_main_menu();
+        return _factory.create_main_menu();
     }
     return {nullptr};
 }

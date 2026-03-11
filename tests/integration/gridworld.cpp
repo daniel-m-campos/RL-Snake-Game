@@ -30,12 +30,12 @@ void GridWorld::update(Move const &action)
     _reward   = 0.0;
 }
 
-Position const &GridWorld::get_state()
+auto GridWorld::get_state() const -> Position const &
 {
     return _position;
 }
 
-double GridWorld::get_reward()
+auto GridWorld::get_reward() const -> double
 {
     return _reward;
 }
@@ -53,7 +53,7 @@ std::unique_ptr<StateActionMap<Position, Move>> CreateActionStateMap()
     return std::make_unique<StateActionHashMap<Position, Move>>(state_action_map);
 }
 
-bool GridWorld::has_terminated()
+auto GridWorld::has_terminated() const -> bool
 {
     return false;
 }

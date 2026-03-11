@@ -27,7 +27,7 @@ void Game::update()
         return;
     }
     _snake->update();
-    if (_food->try_feed(_snake.get()))
+    if (_food->try_feed(*_snake))
     {
         _score++;
         _snake->set_speed(_speed_change + _snake->get_speed());

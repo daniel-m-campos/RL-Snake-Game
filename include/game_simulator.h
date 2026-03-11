@@ -16,5 +16,5 @@ class GameSimulator : public Simulator
 
   private:
     EnvironmentFactory _environment_factory;
-    GameAgent *_agent;
+    GameAgent &_agent;
 };

@@ -1,5 +1,4 @@
-#ifndef RLSNAKEGAME_TEST_UTILS_H
-#define RLSNAKEGAME_TEST_UTILS_H
+#pragma once
 
 #include <iomanip>
 #include <iostream>
@@ -30,8 +29,6 @@ void print(ActionValuer<S, A> *valuer, bool values, int grid_size)
                 print_action(state, action);
             }
         }
-        std::cout << std::endl;
+        std::cout << '\n';
     }
 }
-
-#endif // RLSNAKEGAME_TEST_UTILS_H

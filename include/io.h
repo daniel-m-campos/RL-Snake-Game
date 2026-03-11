@@ -20,10 +20,11 @@ void save(std::filesystem::path const &filepath,
           ActionValuer<GameState, snake::Direction> &action_valuer,
           bool only_argmax = true);
 
-auto load(std::filesystem::path const &filepath)
+[[nodiscard]] auto load(std::filesystem::path const &filepath)
     -> std::optional<std::unique_ptr<ActionValuer<GameState, snake::Direction>>>;
 
-auto find_files(std::filesystem::path const &dir = std::filesystem::current_path())
+[[nodiscard]] auto
+find_files(std::filesystem::path const &dir = std::filesystem::current_path())
     -> std::vector<std::string>;
 
 } // namespace io
