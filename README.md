@@ -74,7 +74,7 @@ ctest --output-on-failure
 
 ## Training
 
-Training runs for 1,000 episodes by default using Q-Learning with ε-greedy exploration:
+Training runs using Q-Learning with ε-greedy exploration. All parameters are editable from the dashboard UI before starting a run.
 
 | Parameter | Default |
 |---|---|
@@ -83,8 +83,12 @@ Training runs for 1,000 episodes by default using Q-Learning with ε-greedy expl
 | Epsilon (ε-greedy) | 0.5 |
 | Discount factor (γ) | 0.9 |
 | Step size (α) | 0.5 |
+| Threads | hardware concurrency |
+| Checkpoint interval | 0 (disabled) |
 
-Trained Q-value tables are saved to disk and loaded automatically when you select "Watch bot play."
+Training runs in parallel across multiple threads. Each thread trains an independent Q-table; after all episodes complete (or at each checkpoint), worker Q-tables are merged using a greedy-max strategy (highest Q-value per state-action pair wins). Setting a non-zero checkpoint interval splits training into chunks, saving progress after each chunk and bounding memory usage.
+
+Trained Q-value tables are saved in a compact binary format and loaded automatically when you select "Watch bot play."
 
 ---
 
@@ -105,6 +109,7 @@ Template-based tabular RL API. Q-Learning is fully implemented; the interface al
 | `include/learner.h` | `Learner` interface and `QLearner` |
 | `include/environment.h` | Environment interface |
 | `include/simulator.h` | Runs agent–environment interaction loops |
+| `include/hash_util.h` | Hash combiner for `std::pair` keys in state-action maps |
 
 ### Snake Game
 
@@ -127,6 +132,7 @@ Template-based tabular RL API. Q-Learning is fully implemented; the interface al
 | `include/menu.h` / `src/menu.cpp` | Generic menu component |
 | `include/game_menu_factory.h` / `src/game_menu_factory.cpp` | Builds the main game menu |
 | `include/gui.h` / `src/gui.cpp` | Top-level NCurses GUI |
+| `include/dashboard.h` / `src/dashboard.cpp` | Panel-based dashboard with progress rendering |
 
 ### IO
 
@@ -138,7 +144,9 @@ Template-based tabular RL API. Q-Learning is fully implemented; the interface al
 
 | File | Description |
 |---|---|
-| `include/trainer.h` / `src/trainer.cpp` | Orchestrates training runs |
+| `include/trainer.h` / `src/trainer.cpp` | Orchestrates single-threaded training runs |
+| `include/parallel_trainer.h` / `src/parallel_trainer.cpp` | Multi-threaded training with Q-table merge |
+| `include/training_config.h` | Training hyperparameters and atomic progress counters |
 | `include/main_utils.h` / `src/main_utils.cpp` | Startup helpers |
 | `src/main.cpp` | `main()` — launches the NCurses GUI |
 

@@ -14,7 +14,10 @@
 #include "keyboard_controller.h"
 #include "main_utils.h"
 #include "menu.h"
+#include "parallel_trainer.h"
 #include "trainer.h"
+
+#include <thread>
 
 auto GameMenuFactory::create_main_menu() -> std::unique_ptr<Menu>
 {
@@ -33,7 +36,7 @@ auto GameMenuFactory::create_watch_menu() -> std::unique_ptr<Menu>
 
 auto GameMenuFactory::create_train_menu() -> std::unique_ptr<Menu>
 {
-    return std::make_unique<TrainMenu>(*this);
+    return create_training_setup_menu();
 }
 
 auto GameMenuFactory::create_select_bot_menu() -> std::unique_ptr<Menu>
@@ -64,6 +67,26 @@ auto GameMenuFactory::create_parameters_menu() -> std::unique_ptr<Menu>
     };
     return std::make_unique<ParametersMenu>(
         *this, std::vector<std::string>{"8x8", "16x16", "24x24", "32x32"}, train_bot);
+}
+
+auto GameMenuFactory::create_training_setup_menu() -> std::unique_ptr<Menu>
+{
+    int64_t constexpr default_training_episodes{100'000};
+    TrainingConfig config;
+    config.num_episodes = default_training_episodes;
+    config.num_threads =
+        std::max(1, static_cast<int>(std::thread::hardware_concurrency()));
+
+    return std::make_unique<TrainingSetupMenu>(
+        *this, config,
+        [](TrainingConfig const &cfg, std::shared_ptr<TrainingProgress> progress)
+        { parallel_train(cfg, std::move(progress)); });
+}
+
+auto GameMenuFactory::create_training_active_menu(
+    std::shared_ptr<TrainingProgress> progress) -> std::unique_ptr<Menu>
+{
+    return std::make_unique<TrainingActiveMenu>(*this, std::move(progress));
 }
 
 auto GameMenuFactory::get_grid_size(std::string const &filename)

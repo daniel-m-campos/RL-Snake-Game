@@ -39,7 +39,7 @@ auto GridWorld::get_reward() const -> double
 {
     return _reward;
 }
-std::unique_ptr<StateActionMap<Position, Move>> CreateActionStateMap()
+auto CreateActionStateMap() -> std::unique_ptr<StateActionMap<Position, Move>>
 {
     std::unordered_map<Position, std::vector<Move>> state_action_map;
     auto moves = {Move::kNorth, Move::kSouth, Move::kEast, Move::kWest};

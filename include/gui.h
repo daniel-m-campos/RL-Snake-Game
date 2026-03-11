@@ -4,18 +4,9 @@
 #include <utility>
 #include <vector>
 
+#include "dashboard.h"
 #include "menu.h"
 #include "ncurses.h"
-
-// RAII wrapper for ncurses WINDOW*
-struct NcursesWinDeleter
-{
-    void operator()(WINDOW *w) const
-    {
-        delwin(w);
-    }
-};
-using NcursesWinPtr = std::unique_ptr<WINDOW, NcursesWinDeleter>;
 
 [[nodiscard]] auto menu_choice(WINDOW &menu_window,
                                std::vector<std::string> const &choices) -> int;
@@ -26,6 +17,9 @@ using NcursesWinPtr = std::unique_ptr<WINDOW, NcursesWinDeleter>;
     -> NcursesWinPtr;
 
 [[nodiscard]] auto make_menu(int height, int color_pair) -> NcursesWinPtr;
+
+class TrainingSetupMenu;
+class TrainingActiveMenu;
 
 class GUI
 {
@@ -40,6 +34,9 @@ class GUI
 
   private:
     std::unique_ptr<MenuFactory> _factory;
+    std::unique_ptr<Dashboard> _dashboard;
 
     static void init_ncurses();
+    auto handle_param_editing(TrainingSetupMenu &setup_menu) -> bool;
+    void handle_training_progress(TrainingActiveMenu &active_menu);
 };

@@ -1,3 +1,5 @@
+find_package(Threads REQUIRED)
+
 add_library(snake_game STATIC
     game.cpp
     snake.cpp
@@ -6,13 +8,15 @@ add_library(snake_game STATIC
     game_simulator.cpp
     io.cpp
     trainer.cpp
+    parallel_trainer.cpp
 )
 target_include_directories(snake_game PUBLIC "${PROJECT_SOURCE_DIR}/include")
-target_link_libraries(snake_game PRIVATE project_warnings)
+target_link_libraries(snake_game PRIVATE project_warnings Threads::Threads)
 
 add_library(gui STATIC
     menu.cpp
     gui.cpp
+    dashboard.cpp
 )
 target_include_directories(gui PUBLIC "${PROJECT_SOURCE_DIR}/include")
 target_link_libraries(gui

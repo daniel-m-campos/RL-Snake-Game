@@ -1,4 +1,8 @@
 #include "menu.h"
+#include "training_config.h"
+
+#include <memory>
+
 #include "gtest/gtest.h"
 
 class MockMenuFactory : public MenuFactory
@@ -27,6 +31,17 @@ class MockMenuFactory : public MenuFactory
         return std::make_unique<ParametersMenu>(
             *this, std::vector<std::string>{"8x8", "16x16", "24x24", "32x32"},
             [](auto &bot) { std::cout << "Train Bot: " << bot << "\n"; });
+    }
+    auto create_training_setup_menu() -> std::unique_ptr<Menu> override
+    {
+        return std::make_unique<TrainingSetupMenu>(
+            *this, TrainingConfig{},
+            [](auto const & /*config*/, auto /*progress*/) {});
+    }
+    auto create_training_active_menu(std::shared_ptr<TrainingProgress> progress)
+        -> std::unique_ptr<Menu> override
+    {
+        return std::make_unique<TrainingActiveMenu>(*this, std::move(progress));
     }
 };
 
@@ -100,4 +115,42 @@ TEST_F(MenuTestFixture, ParametersMenuTransitions)
     }
     next_menu = menu->next(5);
     EXPECT_EQ(next_menu, nullptr);
+}
+
+TEST_F(MenuTestFixture, TrainingSetupMenuOptions)
+{
+    auto menu = factory.create_training_setup_menu();
+    EXPECT_EQ(menu->title(), "Training Setup");
+    EXPECT_EQ(menu->options().size(), 2u);
+}
+
+TEST_F(MenuTestFixture, TrainingSetupMenuBackReturnsMainMenu)
+{
+    auto menu = factory.create_training_setup_menu();
+    auto next = menu->next(1);
+    ASSERT_NE(next, nullptr);
+    EXPECT_EQ(next->title(), "Main Menu");
+}
+
+TEST_F(MenuTestFixture, TrainingSetupMenuConfigAccess)
+{
+    auto menu  = factory.create_training_setup_menu();
+    auto *setup = dynamic_cast<TrainingSetupMenu *>(menu.get());
+    ASSERT_NE(setup, nullptr);
+    EXPECT_EQ(setup->get_config().num_episodes, 1000);
+    TrainingConfig c;
+    c.num_episodes = 500;
+    setup->set_config(c);
+    EXPECT_EQ(setup->get_config().num_episodes, 500);
+}
+
+TEST_F(MenuTestFixture, TrainingActiveMenuCancellation)
+{
+    auto progress = std::make_shared<TrainingProgress>();
+    auto menu     = factory.create_training_active_menu(progress);
+    EXPECT_EQ(menu->title(), "Training in Progress");
+    auto next = menu->next(0);
+    EXPECT_TRUE(progress->cancel_requested.load());
+    ASSERT_NE(next, nullptr);
+    EXPECT_EQ(next->title(), "Main Menu");
 }

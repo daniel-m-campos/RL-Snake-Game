@@ -142,3 +142,78 @@ std::unique_ptr<Menu> ParametersMenu::next(int choice)
     }
     return {nullptr};
 }
+
+TrainingSetupMenu::TrainingSetupMenu(MenuFactory &factory, TrainingConfig config,
+                                     TrainCallback callback)
+    : _factory{factory}, _config{std::move(config)},
+      _train_callback{std::move(callback)}
+{
+}
+
+auto TrainingSetupMenu::title() -> std::string const &
+{
+    return _title;
+}
+
+auto TrainingSetupMenu::options() -> std::vector<std::string> const &
+{
+    return _options;
+}
+
+auto TrainingSetupMenu::next(int choice) -> std::unique_ptr<Menu>
+{
+    switch (choice)
+    {
+    case 0:
+        return nullptr;
+    case 1:
+        return _factory.create_main_menu();
+    default:
+        return nullptr;
+    }
+}
+
+auto TrainingSetupMenu::get_config() const -> TrainingConfig const &
+{
+    return _config;
+}
+
+void TrainingSetupMenu::set_config(TrainingConfig const &config)
+{
+    _config = config;
+}
+
+auto TrainingSetupMenu::get_train_callback() const -> TrainCallback const &
+{
+    return _train_callback;
+}
+
+TrainingActiveMenu::TrainingActiveMenu(MenuFactory &factory,
+                                       std::shared_ptr<TrainingProgress> progress)
+    : _factory{factory}, _progress{std::move(progress)}
+{
+}
+
+auto TrainingActiveMenu::title() -> std::string const &
+{
+    return _title;
+}
+
+auto TrainingActiveMenu::options() -> std::vector<std::string> const &
+{
+    return _options;
+}
+
+auto TrainingActiveMenu::next(int choice) -> std::unique_ptr<Menu>
+{
+    if (choice == 0 && _progress)
+    {
+        _progress->cancel_requested.store(true);
+    }
+    return _factory.create_main_menu();
+}
+
+auto TrainingActiveMenu::get_progress() const -> std::shared_ptr<TrainingProgress>
+{
+    return _progress;
+}

@@ -33,6 +33,17 @@ class TestMenuFactory : public MenuFactory
             *this, std::vector<std::string>{"8x8", "16x16", "24x24", "32x32"},
             [](auto &bot) { std::cout << "Train Bot: " << bot << "\n"; });
     }
+    auto create_training_setup_menu() -> std::unique_ptr<Menu> override
+    {
+        return std::make_unique<TrainingSetupMenu>(
+            *this, TrainingConfig{},
+            [](auto const & /*config*/, auto /*progress*/) {});
+    }
+    auto create_training_active_menu(std::shared_ptr<TrainingProgress> progress)
+        -> std::unique_ptr<Menu> override
+    {
+        return std::make_unique<TrainingActiveMenu>(*this, std::move(progress));
+    }
 };
 
 int main()

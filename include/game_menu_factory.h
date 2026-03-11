@@ -1,6 +1,8 @@
 #pragma once
 
 #include "menu.h"
+#include "training_config.h"
+
 #include <cstddef>
 #include <memory>
 #include <utility>
@@ -13,6 +15,9 @@ class GameMenuFactory : public MenuFactory
     auto create_train_menu() -> std::unique_ptr<Menu> override;
     auto create_select_bot_menu() -> std::unique_ptr<Menu> override;
     auto create_parameters_menu() -> std::unique_ptr<Menu> override;
+    auto create_training_setup_menu() -> std::unique_ptr<Menu> override;
+    auto create_training_active_menu(std::shared_ptr<TrainingProgress> progress)
+        -> std::unique_ptr<Menu> override;
 
   private:
     static auto get_grid_size(std::string const &filename) -> std::pair<size_t, size_t>;

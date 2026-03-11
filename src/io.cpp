@@ -25,8 +25,7 @@ static_assert(std::endian::native == std::endian::little,
 std::array<char, 4> constexpr k_magic{'R', 'L', 'S', 'N'};
 std::uint16_t constexpr k_version{1};
 
-template <typename T>
-void append_bytes(std::vector<std::byte> &buf, T const &value)
+template <typename T> void append_bytes(std::vector<std::byte> &buf, T const &value)
 {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
     auto const *ptr = reinterpret_cast<std::byte const *>(&value);
@@ -54,9 +53,9 @@ void io::save(std::filesystem::path const &filepath,
 
     struct Entry
     {
-        GameState        state;
+        GameState state;
         snake::Direction action;
-        double           value;
+        double value;
     };
 
     std::vector<Entry> entries;
@@ -140,7 +139,8 @@ auto io::load(std::filesystem::path const &filepath)
     auto const num_entries = read_bytes<std::uint32_t>(buf, offset);
 
     std::unordered_map<GameState, std::vector<snake::Direction>> state_action_dict;
-    std::unordered_map<std::pair<GameState, snake::Direction>, double> action_value_dict;
+    std::unordered_map<std::pair<GameState, snake::Direction>, double>
+        action_value_dict;
     state_action_dict.reserve(num_entries);
     action_value_dict.reserve(num_entries);
 
@@ -168,7 +168,7 @@ auto io::load(std::filesystem::path const &filepath)
         auto const action_byte = read_bytes<std::uint8_t>(buf, offset);
         auto const value       = read_bytes<double>(buf, offset);
 
-        GameState const        state{body_to_food};
+        GameState const state{body_to_food};
         snake::Direction const action{static_cast<snake::Direction>(action_byte)};
         state_action_dict[state].push_back(action);
         action_value_dict[{state, action}] = value;
@@ -202,4 +202,3 @@ auto io::find_files(std::filesystem::path const &dir) -> std::vector<std::string
     }
     return files;
 }
-

@@ -39,6 +39,11 @@ template <typename S, typename A> class SimpleActionValuer : public ActionValuer
     void set_value(S state, A action, double new_value) override;
     [[nodiscard]] auto get_state_action_map() -> StateActionMap<S, A> & override;
 
+    [[nodiscard]] auto get_action_value_map() const -> action_value_map const &
+    {
+        return _action_value_map;
+    }
+
   private:
     std::unique_ptr<StateActionMap<S, A>> _state_action_map;
     action_value_map _action_value_map;
