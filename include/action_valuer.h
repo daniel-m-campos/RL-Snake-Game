@@ -68,7 +68,7 @@ SimpleActionValuer<S, A>::SimpleActionValuer(
     std::unique_ptr<StateActionMap<S, A>> state_action_map,
     SimpleActionValuer::action_value_map action_value_map)
     : _state_action_map{std::move(state_action_map)},
-      _action_value_map{action_value_map}
+      _action_value_map{std::move(action_value_map)}
 {
 }
 
