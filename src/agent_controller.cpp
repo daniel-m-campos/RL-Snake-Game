@@ -23,9 +23,9 @@ int constexpr sleep_ms{50};
 
 AgentController::AgentController(std::string const &filename)
 {
-    auto unique_valuer = io::load<GameState, snake::Direction>(filename);
+    auto result = io::load(filename);
     std::shared_ptr<ActionValuer<GameState, snake::Direction>> action_valuer{
-        std::move(unique_valuer)};
+        result ? std::move(*result) : nullptr};
     _agent = AgentFactory<GameState, snake::Direction>::create_q_agent(
         action_valuer, epsilon, discount_factor, step_size,
         GameState{{{initial_grid_x, initial_grid_y}}}, snake::Direction::kUp);

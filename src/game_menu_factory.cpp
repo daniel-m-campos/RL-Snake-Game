@@ -39,7 +39,7 @@ auto GameMenuFactory::create_train_menu() -> std::unique_ptr<Menu>
 auto GameMenuFactory::create_select_bot_menu() -> std::unique_ptr<Menu>
 {
     auto choices             = io::find_files();
-    std::string const suffix = "_action_valuer.txt";
+    std::string const suffix = io::file_suffix;
     for (auto &file : choices)
     {
         file = std::regex_replace(file, std::regex(suffix), "");
@@ -59,7 +59,7 @@ auto GameMenuFactory::create_parameters_menu() -> std::unique_ptr<Menu>
     auto train_bot = [](std ::string const &choice)
     {
         auto [width, height] = get_grid_size(choice);
-        int64_t constexpr training_episodes{5'000};
+        int64_t constexpr training_episodes{100'000};
         train(width, height, training_episodes);
     };
     return std::make_unique<ParametersMenu>(

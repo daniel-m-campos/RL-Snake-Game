@@ -42,6 +42,5 @@ void train(std::size_t grid_width, std::size_t grid_height, int64_t num_episodes
 auto file_name(std::size_t grid_width, std::size_t grid_height) -> std::string
 {
     return std::to_string(grid_width) + "x" + std::to_string(grid_height) +
-           "_action_valuer"
-           ".txt";
+           io::file_suffix;
 }

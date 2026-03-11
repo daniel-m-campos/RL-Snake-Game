@@ -20,6 +20,4 @@ target_link_libraries(UNIT_TEST
         GTest::gtest_main
 )
 
-configure_file(16x16_action_valuer.txt "${CMAKE_CURRENT_BINARY_DIR}" COPYONLY)
-
 gtest_discover_tests(UNIT_TEST)
