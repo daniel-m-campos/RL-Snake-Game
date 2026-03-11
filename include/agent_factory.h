@@ -5,21 +5,17 @@
 template <typename S, typename A> class AgentFactory
 {
   public:
-    static auto
-    create_q_agent(std::unordered_map<S, std::vector<A>> state_action_map,
-                   double epsilon, double discount_factor, double step_size,
-                   S initial_state,
-                   A initial_action) // NOLINT(bugprone-easily-swappable-parameters)
+    static auto create_q_agent(std::unordered_map<S, std::vector<A>> state_action_map,
+                               double epsilon, double discount_factor, double step_size,
+                               S initial_state, A initial_action)
         -> std::unique_ptr<Agent<S, A>>;
 
-    static auto
-    create_q_agent(std::shared_ptr<ActionValuer<S, A>> action_valuer, double epsilon,
-                   double discount_factor, double step_size, S initial_state,
-                   A initial_action) // NOLINT(bugprone-easily-swappable-parameters)
+    static auto create_q_agent(std::shared_ptr<ActionValuer<S, A>> action_valuer,
+                               double epsilon, double discount_factor, double step_size,
+                               S initial_state, A initial_action)
         -> std::unique_ptr<Agent<S, A>>;
 };
 
-// NOLINTBEGIN(bugprone-easily-swappable-parameters)
 template <typename S, typename A>
 auto AgentFactory<S, A>::create_q_agent(
     std::unordered_map<S, std::vector<A>> state_action_map, double epsilon,
@@ -34,9 +30,7 @@ auto AgentFactory<S, A>::create_q_agent(
                                              std::move(learner), initial_state,
                                              initial_action);
 }
-// NOLINTEND(bugprone-easily-swappable-parameters)
 
-// NOLINTBEGIN(bugprone-easily-swappable-parameters)
 template <typename S, typename A>
 auto AgentFactory<S, A>::create_q_agent(
     std::shared_ptr<ActionValuer<S, A>> action_valuer, double epsilon,
@@ -49,4 +43,3 @@ auto AgentFactory<S, A>::create_q_agent(
                                              std::move(learner), initial_state,
                                              initial_action);
 }
-// NOLINTEND(bugprone-easily-swappable-parameters)

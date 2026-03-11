@@ -18,6 +18,7 @@ Checks: >
   -readability-identifier-length,
   -modernize-use-ranges,
   -modernize-use-nodiscard,
+  -bugprone-easily-swappable-parameters,
 
 # 2. Settings
 # Treat warnings as errors? (Like --strict in Python)

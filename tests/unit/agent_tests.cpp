@@ -50,7 +50,7 @@ TEST_F(AgentImplFixture, TestGetAction)
     auto new_state  = 2;
     auto new_action = 3;
 
-    EXPECT_CALL(*policy_ptr.get(), ParentheisesOp(new_state))
+    EXPECT_CALL(*policy_ptr.get(), parentheses_op(new_state))
         .WillOnce(Return(new_action));
     AgentImpl<int, int> agent{valuer_ptr, std::move(policy_ptr), std::move(learner_ptr),
                               state, action};

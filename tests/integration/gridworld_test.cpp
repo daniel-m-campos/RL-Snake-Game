@@ -6,7 +6,7 @@
 #include "test_utils.h"
 #include "gtest/gtest.h"
 
-template <typename S, typename A> void PrintAction(S &state, A &action)
+template <typename S, typename A> void print_action(S & /*state*/, A &action)
 {
     std::unordered_map<A, std::string> map{{
         {Move::kNorth, "^"},
@@ -28,8 +28,8 @@ TEST(TestGridWorldSimulation, TestSimulationLoop)
 
     run_episode(environment, *agent, 10000);
 
-    Print(action_valuer.get(), true, 5);
-    Print(action_valuer.get(), false, 5);
+    print(action_valuer.get(), true, 5);
+    print(action_valuer.get(), false, 5);
 
     std::unordered_map<Position, Move> optimal_policy{{
         {{0, 4}, Move::kEast},

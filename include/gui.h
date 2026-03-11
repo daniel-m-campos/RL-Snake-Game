@@ -13,7 +13,6 @@ auto get_max(WINDOW *window) -> std::pair<int, int>;
 
 auto make_title(std::string const &title, int color_pair) -> WINDOW *;
 
-// NOLINT(bugprone-easily-swappable-parameters)
 auto make_menu(int height, int color_pair) -> WINDOW *;
 
 class GUI

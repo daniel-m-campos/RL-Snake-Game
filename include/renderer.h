@@ -10,7 +10,6 @@ struct SDL_Renderer; // IWYU pragma: keep
 class Renderer
 {
   public:
-    // NOLINT(bugprone-easily-swappable-parameters)
     Renderer(std::size_t screen_width, std::size_t screen_height,
              std::size_t grid_width, std::size_t grid_height);
     Renderer(Renderer const &)                     = delete;

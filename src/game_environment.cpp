@@ -103,8 +103,7 @@ void GameEnvironment::update(snake::Direction const &action)
 
 void GameEnvironment::update_game_state()
 {
-    auto const &food = _game->get_food().get_location();
-    _state           = GameState::create(*_game);
+    _state = GameState::create(*_game);
 }
 
 GameState const &GameEnvironment::get_state()

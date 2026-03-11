@@ -1,7 +1,6 @@
 #include "food.h"
 #include <cstddef>
 
-// NOLINTBEGIN(bugprone-easily-swappable-parameters)
 Food::Food(std::size_t grid_width, std::size_t grid_height)
     : _engine{(_dev())}, _random_w{0, static_cast<int>(grid_width) - 1},
       _random_h{0, static_cast<int>(grid_height) - 1}
@@ -16,7 +15,6 @@ Food::Food(std::size_t grid_width, std::size_t grid_height,
       _random_h{0, static_cast<int>(grid_height)}
 {
 }
-// NOLINTEND(bugprone-easily-swappable-parameters)
 
 snake::Point<int> const &Food::get_location() const
 {

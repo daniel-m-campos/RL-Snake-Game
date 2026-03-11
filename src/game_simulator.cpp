@@ -10,7 +10,6 @@ GameSimulator::GameSimulator(EnvironmentFactory environment_factory, GameAgent &
 {
 }
 
-// NOLINTBEGIN(bugprone-easily-swappable-parameters)
 void GameSimulator::simulate(int64_t num_episodes, int64_t max_steps)
 {
     for (int64_t n = 0; n < num_episodes; ++n)
@@ -19,4 +18,3 @@ void GameSimulator::simulate(int64_t num_episodes, int64_t max_steps)
         run_episode<GameState, snake::Direction>(environment, *_agent, max_steps);
     }
 }
-// NOLINTEND(bugprone-easily-swappable-parameters)

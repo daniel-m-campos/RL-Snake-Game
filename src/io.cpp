@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <dirent.h>
 #include <fstream>
+#include <iterator>
 #include <memory>
 #include <set>
 #include <sstream>
@@ -60,7 +61,7 @@ auto io::load(std::string const &filename)
         std::set<GameState> states;
         std::transform(state_action_dict.begin(), state_action_dict.end(),
                        std::inserter(states, states.end()),
-                       [](auto pair) { return pair.first; });
+                       [](auto const &pair) { return pair.first; });
 
         auto action_valuer = ActionValuerFactory<GameState, snake::Direction>::
             create_simple_action_valuer(states, snake::directions);

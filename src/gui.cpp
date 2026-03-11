@@ -16,24 +16,26 @@ auto menu_choice(WINDOW *menu_window, std::vector<std::string> const &choices) -
     int highlight = 0;
     while (true)
     {
-        for (int i = 0; i < choices.size(); ++i)
+        for (std::size_t i = 0; i < choices.size(); ++i)
         {
-            if (i == highlight)
+            if (static_cast<int>(i) == highlight)
             {
                 wattron(menu_window, A_REVERSE);
             }
             // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
-            mvwprintw(menu_window, i + 1, 1, choices[i].c_str());
+            mvwprintw(menu_window, static_cast<int>(i) + 1, 1, choices[i].c_str());
             wattroff(menu_window, A_REVERSE);
         }
         choice = wgetch(menu_window);
         switch (choice)
         {
         case KEY_UP:
-            highlight = std::max(--highlight, 0);
+            --highlight;
+            highlight = std::max(highlight, 0);
             break;
         case KEY_DOWN:
-            highlight = std::min(++highlight, static_cast<int>(choices.size() - 1));
+            ++highlight;
+            highlight = std::min(highlight, static_cast<int>(choices.size() - 1));
             break;
         default:
             break;
@@ -70,7 +72,6 @@ auto make_title(std::string const &title, int color_pair) -> WINDOW *
     return window;
 }
 
-// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
 auto make_menu(int height, int color_pair) -> WINDOW *
 {
     auto [y_max, x_max] = get_max(stdscr);

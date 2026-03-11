@@ -1,7 +1,6 @@
 #include "io.h"
 
 #include "action_valuer.h"
-#include "state_action_map.h"
 #include "gtest/gtest.h"
 
 class IOFixture : public ::testing::Test

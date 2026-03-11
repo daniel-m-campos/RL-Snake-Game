@@ -13,7 +13,6 @@ double constexpr discount_factor{0.9};
 double constexpr step_size{0.5};
 } // namespace trainer_defaults
 
-// NOLINT(bugprone-easily-swappable-parameters)
 void train(std::size_t grid_width, std::size_t grid_height,
            int64_t num_episodes   = trainer_defaults::num_episodes,
            int64_t max_steps      = trainer_defaults::max_steps,

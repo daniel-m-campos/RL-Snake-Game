@@ -17,7 +17,6 @@ std::size_t constexpr screen_height{640};
 void game_loop(Game &game, Controller &controller, Renderer &renderer,
                std::size_t target_frame_duration);
 
-// NOLINT(bugprone-easily-swappable-parameters)
 void play(Controller &controller,
           std::size_t grid_width        = main_utils_defaults::grid_width,
           std::size_t grid_height       = main_utils_defaults::grid_height,

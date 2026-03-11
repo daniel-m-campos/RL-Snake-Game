@@ -40,9 +40,9 @@ AgentImpl<S, A>::AgentImpl(std::shared_ptr<ActionValuer<S, A>> action_valuer,
                            std::unique_ptr<Policy<S, A>> policy,
                            std::unique_ptr<Learner<S, A>> learner, S initial_state,
                            A initial_action)
-    : _action_valuer{action_valuer}, _policy{std::move(policy)},
-      _learner{std::move(learner)}, _last_state{initial_state},
-      _last_action{initial_action}
+    : _last_state{initial_state}, _last_action{initial_action},
+      _action_valuer{action_valuer}, _policy{std::move(policy)},
+      _learner{std::move(learner)}
 {
 }
 

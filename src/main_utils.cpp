@@ -56,7 +56,6 @@ void game_loop(Game &game, Controller &controller, Renderer &renderer,
     }
 }
 
-// NOLINTBEGIN(bugprone-easily-swappable-parameters)
 void play(Controller &controller, std::size_t grid_width, std::size_t grid_height,
           std::size_t frames_per_second, std::size_t screen_width,
           std::size_t screen_height)
@@ -72,7 +71,6 @@ void play(Controller &controller, std::size_t grid_width, std::size_t grid_heigh
 
     print(game);
 }
-// NOLINTEND(bugprone-easily-swappable-parameters)
 
 void print(Game const &game)
 {

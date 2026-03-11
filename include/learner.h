@@ -20,8 +20,7 @@ template <typename S, typename A> class QLearner : public Learner<S, A>
 {
   public:
     QLearner() = delete;
-    QLearner(double discount_factor,
-             double step_size); // NOLINT(bugprone-easily-swappable-parameters)
+    QLearner(double discount_factor, double step_size);
     void reinforce(Policy<S, A> const &policy, ActionValuer<S, A> &valuer, S state,
                    A action, double reward, S new_state) override;
 
@@ -33,17 +32,16 @@ template <typename S, typename A> class QLearner : public Learner<S, A>
         -> double;
 };
 
-// NOLINTBEGIN(bugprone-easily-swappable-parameters)
 template <typename S, typename A>
 QLearner<S, A>::QLearner(double discount_factor, double step_size)
     : _discount_factor(discount_factor), _step_size(step_size)
 {
 }
-// NOLINTEND(bugprone-easily-swappable-parameters)
 
 template <typename S, typename A>
-void QLearner<S, A>::reinforce(Policy<S, A> const &policy, ActionValuer<S, A> &valuer,
-                               S state, A action, double reward, S new_state)
+void QLearner<S, A>::reinforce(Policy<S, A> const & /*policy*/,
+                               ActionValuer<S, A> &valuer, S state, A action,
+                               double reward, S new_state)
 {
     auto old_value    = valuer.get_value(state, action);
     auto new_action   = valuer.arg_max(new_state)[0];

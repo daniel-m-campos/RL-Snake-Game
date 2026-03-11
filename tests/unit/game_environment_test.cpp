@@ -7,8 +7,8 @@ static std::size_t constexpr grid_height{32};
 
 TEST(GameStateTest, TestComparisonOperators)
 {
-    GameState const first{{{0, 1}, {2, 3}}};
-    GameState const second{{{4, 5}, {6, 7}}};
+    GameState const first{{{.x = 0, .y = 1}, {.x = 2, .y = 3}}};
+    GameState const second{{{.x = 4, .y = 5}, {.x = 6, .y = 7}}};
     EXPECT_EQ(first, first);
     EXPECT_EQ(second, second);
     EXPECT_FALSE(first == second);
@@ -31,8 +31,8 @@ class GameEnvironmentInitializationFixture : public ::testing::Test
 TEST_F(GameEnvironmentInitializationFixture, TestInitialUpdate)
 {
     snake::Point<int> expected_head_to_food{
-        static_cast<int>(init_location.x - grid_width / 2),
-        static_cast<int>(init_location.y - grid_height / 2)};
+        .x = static_cast<int>(init_location.x - (grid_width / 2)),
+        .y = static_cast<int>(init_location.y - (grid_height / 2))};
     EXPECT_EQ(environment.get_state().body_to_food[0], expected_head_to_food);
     environment.update(snake::Direction::kLeft);
     expected_head_to_food.x += 1;
@@ -68,7 +68,7 @@ TEST_F(GameEnvironmentRewardsFixture, TestGetRewardOnDeath)
         snake->update();
     }
     GameEnvironment environment{
-        std::make_unique<Game>(kGridWidth, kGridHeight, std::move(snake))};
+        std::make_unique<Game>(grid_width, grid_height, std::move(snake))};
     environment.update(snake::Direction::kUp);
     EXPECT_EQ(environment.get_reward(), -100);
 }
@@ -76,9 +76,9 @@ TEST_F(GameEnvironmentRewardsFixture, TestGetRewardOnDeath)
 TEST_F(GameEnvironmentRewardsFixture, TestGetRewardOnEatFood)
 {
     snake->set_speed(1.0);
-    snake::Point<int> location = {static_cast<int>(snake->get_head_x()),
-                                  -1 + static_cast<int>(snake->get_head_y())};
-    auto food{std::make_unique<Food>(kGridWidth, kGridHeight, location)};
+    snake::Point<int> location = {.x = static_cast<int>(snake->get_head_x()),
+                                  .y = -1 + static_cast<int>(snake->get_head_y())};
+    auto food{std::make_unique<Food>(grid_width, grid_height, location)};
     auto game{std::make_unique<Game>(std::move(snake), std::move(food))};
     GameEnvironment environment{std::move(game)};
     environment.update(snake::Direction::kUp);

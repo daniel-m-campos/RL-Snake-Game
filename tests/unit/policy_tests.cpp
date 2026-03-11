@@ -4,11 +4,11 @@
 class MockPolicy : public Policy<int, int>
 {
   public:
-    int operator()(int state) override
+    auto operator()(int state) -> int override
     {
         return -state;
     }
-    double probability(int action, int state) override
+    auto probability(int action, int state) -> double override
     {
         return action == -state;
     }

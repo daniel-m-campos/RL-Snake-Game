@@ -1,5 +1,5 @@
 #include "action_valuer.h"
-#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 class SimpleActionValuerFixture : public ::testing::Test
 {

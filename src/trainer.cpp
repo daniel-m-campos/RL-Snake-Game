@@ -13,7 +13,6 @@
 #include <memory>
 #include <string>
 
-// NOLINTBEGIN(bugprone-easily-swappable-parameters)
 void train(std::size_t grid_width, std::size_t grid_height, int64_t num_episodes,
            int64_t max_steps, double epsilon, double discount_factor, double step_size)
 {
@@ -39,7 +38,6 @@ void train(std::size_t grid_width, std::size_t grid_height, int64_t num_episodes
 
     io::save(file_name(grid_width, grid_height), *action_valuer);
 }
-// NOLINTEND(bugprone-easily-swappable-parameters)
 
 auto file_name(std::size_t grid_width, std::size_t grid_height) -> std::string
 {

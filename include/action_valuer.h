@@ -14,9 +14,9 @@ template <typename S, typename A> class ActionValuer
     virtual ~ActionValuer()                                       = default;
     ActionValuer()                                                = default;
     ActionValuer(ActionValuer const &)                            = default;
-    ActionValuer &operator=(ActionValuer const &)                 = default;
+    auto operator=(ActionValuer const &) -> ActionValuer &        = default;
     ActionValuer(ActionValuer &&)                                 = default;
-    ActionValuer &operator=(ActionValuer &&)                      = default;
+    auto operator=(ActionValuer &&) -> ActionValuer &             = default;
     virtual auto get_value(S, A) -> double                        = 0;
     virtual void set_value(S, A, double)                          = 0;
     virtual auto arg_max(S) -> std::vector<A>                     = 0;
@@ -67,7 +67,7 @@ SimpleActionValuer<S, A>::SimpleActionValuer(
 }
 
 template <typename S, typename A>
-std::vector<A> SimpleActionValuer<S, A>::arg_max(S state)
+auto SimpleActionValuer<S, A>::arg_max(S state) -> std::vector<A>
 {
     auto compare = [&](auto const &left, auto const &right)
     { return _action_value_map[{state, left}] > _action_value_map[{state, right}]; };
@@ -90,7 +90,7 @@ std::vector<A> SimpleActionValuer<S, A>::arg_max(S state)
 }
 
 template <typename S, typename A>
-double SimpleActionValuer<S, A>::get_value(S state, A action)
+auto SimpleActionValuer<S, A>::get_value(S state, A action) -> double
 {
     return _action_value_map[{state, action}];
 }

@@ -78,7 +78,7 @@ std::vector<std::string> const &SelectBotMenu::options()
 
 std::unique_ptr<Menu> SelectBotMenu::next(int choice)
 {
-    if (choice < _bots.size())
+    if (choice < static_cast<int>(_bots.size()))
     {
         _watch_bot(_bots[choice]);
         return _factory->create_main_menu();
@@ -132,11 +132,11 @@ std::vector<std::string> const &ParametersMenu::options()
 
 std::unique_ptr<Menu> ParametersMenu::next(int choice)
 {
-    if (choice < _parameters.size() - 1)
+    if (choice < static_cast<int>(_parameters.size()) - 1)
     {
         _train_bot(_parameters[choice]);
     }
-    if (choice < _parameters.size())
+    if (choice < static_cast<int>(_parameters.size()))
     {
         return _factory->create_main_menu();
     }

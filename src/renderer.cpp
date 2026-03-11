@@ -30,7 +30,6 @@ Uint8 constexpr head_dead_r{0xFF};
 Uint8 constexpr alpha_full{0xFF};
 } // namespace
 
-// NOLINTBEGIN(bugprone-easily-swappable-parameters)
 Renderer::Renderer(std::size_t const screen_width, std::size_t const screen_height,
                    std::size_t const grid_width, std::size_t const grid_height)
     : screen_width(screen_width), screen_height(screen_height), grid_width(grid_width),
@@ -63,7 +62,6 @@ Renderer::Renderer(std::size_t const screen_width, std::size_t const screen_heig
         std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
     }
 }
-// NOLINTEND(bugprone-easily-swappable-parameters)
 
 Renderer::~Renderer()
 {
