@@ -1,33 +1,53 @@
+#include <cstddef>
+#include <memory>
+#include <utility>
+
+#include "food.h"
 #include "game.h"
+#include "snake.h"
 
-#include <iostream>
-
+// NOLINTBEGIN(bugprone-easily-swappable-parameters)
 Game::Game(std::size_t grid_width, std::size_t grid_height,
-           std::unique_ptr<snake::Snake> snake, float initial_speed,
-           float speed_change)
+           std::unique_ptr<snake::Snake> snake, float initial_speed, float speed_change)
     : _snake{(std::move(snake))},
       _food{(std::make_unique<Food>(grid_width, grid_height))},
-      _speed_change{speed_change} {
-  _snake->SetSpeed(initial_speed);
+      _speed_change{speed_change}
+{
+    _snake->set_speed(initial_speed);
 }
+// NOLINTEND(bugprone-easily-swappable-parameters)
 
 Game::Game(std::unique_ptr<snake::Snake> snake, std::unique_ptr<Food> food,
            float speed_change)
-    : _snake{(std::move(snake))},
-      _food{std::move(food)},
-      _speed_change{speed_change} {}
-
-void Game::Update() {
-  if (!_snake->IsAlive()) return;
-  _snake->Update();
-  if (_food->TryFeed(_snake.get())) {
-    _score++;
-    _snake->SetSpeed(_speed_change + _snake->GetSpeed());
-  }
+    : _snake{(std::move(snake))}, _food{std::move(food)}, _speed_change{speed_change}
+{
 }
 
-int Game::GetScore() const { return _score; }
+void Game::update()
+{
+    if (!_snake->is_alive())
+    {
+        return;
+    }
+    _snake->update();
+    if (_food->try_feed(_snake.get()))
+    {
+        _score++;
+        _snake->set_speed(_speed_change + _snake->get_speed());
+    }
+}
 
-snake::Snake &Game::GetSnake() const { return *_snake; }
+auto Game::get_score() const -> int
+{
+    return _score;
+}
 
-Food &Game::GetFood() const { return *_food; }
+auto Game::get_snake() const -> snake::Snake &
+{
+    return *_snake;
+}
+
+auto Game::get_food() const -> Food &
+{
+    return *_food;
+}

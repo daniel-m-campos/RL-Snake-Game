@@ -1,123 +1,163 @@
 #include "snake.h"
 
+#include <algorithm>
 #include <cmath>
+#include <cstddef>
 #include <ostream>
 
-using namespace snake;
+using namespace snake; // NOLINT(google-build-using-namespace)
 
-std::ostream &snake::operator<<(std::ostream &os, Direction action) {
-  os << static_cast<int>(action);
-  return os;
+auto snake::operator<<(std::ostream &os, Direction action) -> std::ostream &
+{
+    os << static_cast<int>(action);
+    return os;
 }
 
-Direction snake::GetOpposite(const Direction &direction) {
-  switch (direction) {
+auto snake::get_opposite(Direction const &direction) -> Direction
+{
+    switch (direction)
+    {
     case snake::Direction::kDown:
-      return snake::Direction::kUp;
+        return snake::Direction::kUp;
     case snake::Direction::kUp:
-      return snake::Direction::kDown;
+        return snake::Direction::kDown;
     case snake::Direction::kLeft:
-      return snake::Direction::kRight;
+        return snake::Direction::kRight;
     default:
-      return snake::Direction::kLeft;
-  }
+        return snake::Direction::kLeft;
+    }
 }
 
-void GridSnake::Update() {
-  Point<int> prev_cell{
-      static_cast<int>(_head_x),
-      static_cast<int>(
-          _head_y)};  // We first capture the head's cell before updating.
-  UpdateHead();
-  Point<int> current_cell{
-      static_cast<int>(_head_x),
-      static_cast<int>(_head_y)};  // Capture the head's cell after updating.
+void GridSnake::update()
+{
+    Point<int> prev_cell{
+        static_cast<int>(_head_x),
+        static_cast<int>(_head_y)}; // We first capture the head's cell before updating.
+    update_head();
+    Point<int> current_cell{
+        static_cast<int>(_head_x),
+        static_cast<int>(_head_y)}; // Capture the head's cell after updating.
 
-  // Update all of the _body vector items if the snake head has moved to a new
-  // cell.
-  if (current_cell.x != prev_cell.x || current_cell.y != prev_cell.y) {
-    UpdateBody(current_cell, prev_cell);
-  }
+    // Update all of the _body vector items if the snake head has moved to a new
+    // cell.
+    if (current_cell.x != prev_cell.x || current_cell.y != prev_cell.y)
+    {
+        update_body(current_cell, prev_cell);
+    }
 }
 
-void GridSnake::UpdateHead() {
-  switch (_direction) {
+void GridSnake::update_head()
+{
+    switch (_direction)
+    {
     case Direction::kUp:
-      _head_y -= _speed;
-      break;
+        _head_y -= _speed;
+        break;
 
     case Direction::kDown:
-      _head_y += _speed;
-      break;
+        _head_y += _speed;
+        break;
 
     case Direction::kLeft:
-      _head_x -= _speed;
-      break;
+        _head_x -= _speed;
+        break;
 
     case Direction::kRight:
-      _head_x += _speed;
-      break;
-  }
-
-  // Wrap the GridSnake around to the beginning if going off of the screen.
-  _head_x = fmod(_head_x + _grid_width, _grid_width);
-  _head_y = fmod(_head_y + _grid_height, _grid_height);
-}
-
-void GridSnake::UpdateBody(Point<int> &current_head_cell,
-                           Point<int> &prev_head_cell) {
-  // Add previous head location to vector
-  _body.push_back(prev_head_cell);
-
-  if (!_growing) {
-    // Remove the tail from the vector.
-    _body.erase(_body.begin());
-  } else {
-    _growing = false;
-    _size++;
-  }
-
-  // Check if the snake has died.
-  for (auto const &item : _body) {
-    if (current_head_cell.x == item.x && current_head_cell.y == item.y) {
-      _alive = false;
+        _head_x += _speed;
+        break;
     }
-  }
+
+    // Wrap the GridSnake around to the beginning if going off of the screen.
+    _head_x = fmodf(_head_x + static_cast<float>(_grid_width),
+                    static_cast<float>(_grid_width));
+    _head_y = fmodf(_head_y + static_cast<float>(_grid_height),
+                    static_cast<float>(_grid_height));
 }
 
-void GridSnake::GrowBody() { _growing = true; }
+// NOLINTBEGIN(bugprone-easily-swappable-parameters)
+void GridSnake::update_body(Point<int> &current_cell, Point<int> &prev_cell)
+{
+    // NOLINTEND(bugprone-easily-swappable-parameters)
+    // Add previous head location to vector
+    _body.push_back(prev_cell);
+
+    if (!_growing)
+    {
+        // Remove the tail from the vector.
+        _body.erase(_body.begin());
+    }
+    else
+    {
+        _growing = false;
+        _size++;
+    }
+
+    // Check if the snake has died.
+    _alive =
+        !std::any_of(_body.begin(), _body.end(), [&current_cell](Point<int> const &item)
+                     { return current_cell.x == item.x && current_cell.y == item.y; });
+}
+
+void GridSnake::grow_body()
+{
+    _growing = true;
+}
 
 // Inefficient method to check if cell is occupied by snake.
-bool GridSnake::SnakeCell(int x, int y) const {
-  if (x == static_cast<int>(_head_x) && y == static_cast<int>(_head_y)) {
-    return true;
-  }
-  for (auto const &item : _body) {
-    if (x == item.x && y == item.y) {
-      return true;
+bool GridSnake::snake_cell(int x, int y) const
+{
+    if (x == static_cast<int>(_head_x) && y == static_cast<int>(_head_y))
+    {
+        return true;
     }
-  }
-  return false;
+    return std::any_of(_body.begin(), _body.end(), [x, y](Point<int> const &item)
+                       { return x == item.x && y == item.y; });
 }
 
-size_t GridSnake::Size() const { return _size; }
-
-enum Direction GridSnake::GetDirection() const { return _direction; }
-
-void GridSnake::SetDirection(Direction direction) {
-  if (direction != GetOpposite(_direction) || Size() == 1) {
-    _direction = direction;
-  }
+size_t GridSnake::size() const
+{
+    return _size;
 }
 
-bool GridSnake::IsAlive() const { return _alive; }
+Direction GridSnake::get_direction() const
+{
+    return _direction;
+}
 
-float GridSnake::GetHeadX() const { return _head_x; }
+void GridSnake::set_direction(Direction direction)
+{
+    if (direction != get_opposite(_direction) || size() == 1)
+    {
+        _direction = direction;
+    }
+}
 
-float GridSnake::GetHeadY() const { return _head_y; }
+bool GridSnake::is_alive() const
+{
+    return _alive;
+}
 
-const std::vector<Point<int>> &GridSnake::GetBody() const { return _body; }
+float GridSnake::get_head_x() const
+{
+    return _head_x;
+}
 
-float GridSnake::GetSpeed() const { return _speed; }
+float GridSnake::get_head_y() const
+{
+    return _head_y;
+}
 
-void GridSnake::SetSpeed(float speed) { _speed = speed; }
+std::vector<Point<int>> const &GridSnake::get_body() const
+{
+    return _body;
+}
+
+auto GridSnake::get_speed() const -> float
+{
+    return _speed;
+}
+
+void GridSnake::set_speed(float speed)
+{
+    _speed = speed;
+}

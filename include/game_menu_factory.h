@@ -1,18 +1,19 @@
-#ifndef RLSNAKEGAME_GAME_MENU_FACTORY_H
-#define RLSNAKEGAME_GAME_MENU_FACTORY_H
+#pragma once
 
-#include "gui.h"
+#include "menu.h"
+#include <cstddef>
+#include <memory>
+#include <utility>
 
-class GameMenuFactory : public MenuFactory {
- public:
-  std::unique_ptr<Menu> CreateMainMenu() override;
-  std::unique_ptr<Menu> CreateWatchMenu() override;
-  std::unique_ptr<Menu> CreateTrainMenu() override;
-  std::unique_ptr<Menu> CreateSelectBotMenu() override;
-  std::unique_ptr<Menu> CreateParametersMenu() override;
+class GameMenuFactory : public MenuFactory
+{
+  public:
+    auto create_main_menu() -> std::unique_ptr<Menu> override;
+    auto create_watch_menu() -> std::unique_ptr<Menu> override;
+    auto create_train_menu() -> std::unique_ptr<Menu> override;
+    auto create_select_bot_menu() -> std::unique_ptr<Menu> override;
+    auto create_parameters_menu() -> std::unique_ptr<Menu> override;
 
- private:
-  static std::pair<size_t, size_t> GetGridSize(const std::string& filename);
+  private:
+    static auto get_grid_size(std::string const &filename) -> std::pair<size_t, size_t>;
 };
-
-#endif  // RLSNAKEGAME_GAME_MENU_FACTORY_H

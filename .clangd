@@ -1,6 +1,9 @@
 CompileFlags:
   CompilationDatabase: build
+  Add:
+    - --stdlib=libc++
+    - -isysroot
+    - /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
 
-Diagnostics:
-  UnusedIncludes: Strict
-  MissingIncludes: Strict
+InlayHints:
+  Enabled: true

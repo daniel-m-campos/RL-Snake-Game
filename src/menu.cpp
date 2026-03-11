@@ -1,100 +1,144 @@
 #include "menu.h"
+#include <functional>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
 
-MainMenu::MainMenu(MenuFactory* factory, std::function<void(void)> snake_game)
-    : _factory{factory}, _snake_game{std::move(snake_game)} {}
+MainMenu::MainMenu(MenuFactory *factory, std::function<void(void)> snake_game)
+    : _factory{factory}, _snake_game{std::move(snake_game)}
+{
+}
 
-std::unique_ptr<Menu> MainMenu::Next(int choice) {
-  switch (choice) {
+std::unique_ptr<Menu> MainMenu::next(int choice)
+{
+    switch (choice)
+    {
     case 0:
-      _snake_game();
-      return _factory->CreateMainMenu();
+        _snake_game();
+        return _factory->create_main_menu();
     case 1:
-      return _factory->CreateWatchMenu();
+        return _factory->create_watch_menu();
     case 2:
-      return _factory->CreateTrainMenu();
+        return _factory->create_train_menu();
     default:
-      return std::unique_ptr<Menu>(nullptr);
-  }
+        return {nullptr};
+    }
 }
 
-const std::string& MainMenu::Title() { return _title; }
+std::string const &MainMenu::title()
+{
+    return _title;
+}
 
-const std::vector<std::string>& MainMenu::Options() { return _options; }
+std::vector<std::string> const &MainMenu::options()
+{
+    return _options;
+}
 
-WatchMenu::WatchMenu(MenuFactory* factory) : _factory{factory} {}
+WatchMenu::WatchMenu(MenuFactory *factory) : _factory{factory} {}
 
-const std::string& WatchMenu::Title() { return _title; }
+std::string const &WatchMenu::title()
+{
+    return _title;
+}
 
-const std::vector<std::string>& WatchMenu::Options() { return _options; }
-std::unique_ptr<Menu> WatchMenu::Next(int choice) {
-  switch (choice) {
+std::vector<std::string> const &WatchMenu::options()
+{
+    return _options;
+}
+std::unique_ptr<Menu> WatchMenu::next(int choice)
+{
+    switch (choice)
+    {
     case 0:
-      return _factory->CreateSelectBotMenu();
-      ;
+        return _factory->create_select_bot_menu();
     case 1:
-      return _factory->CreateMainMenu();
+        return _factory->create_main_menu();
     default:
-      return std::unique_ptr<Menu>(nullptr);
-  }
+        return {nullptr};
+    }
 }
 
-SelectBotMenu::SelectBotMenu(MenuFactory* factory,
-                             std::vector<std::string> bots,
-                             std::function<void(const std ::string&)> watch_bot)
-    : _factory{factory},
-      _bots{std::move(bots)},
-      _watch_bot{std::move(watch_bot)} {}
-
-const std::string& SelectBotMenu::Title() { return _title; }
-
-const std::vector<std::string>& SelectBotMenu::Options() { return _bots; }
-
-std::unique_ptr<Menu> SelectBotMenu::Next(int choice) {
-  if (choice < _bots.size()) {
-    _watch_bot(_bots[choice]);
-    return _factory->CreateMainMenu();
-  }
-  return std::unique_ptr<Menu>(nullptr);
+SelectBotMenu::SelectBotMenu(MenuFactory *factory, std::vector<std::string> bots,
+                             std::function<void(std ::string const &)> watch_bot)
+    : _factory{factory}, _bots{std::move(bots)}, _watch_bot{std::move(watch_bot)}
+{
 }
 
-TrainMenu::TrainMenu(MenuFactory* factory) : _factory{factory} {}
+std::string const &SelectBotMenu::title()
+{
+    return _title;
+}
 
-const std::string& TrainMenu::Title() { return _title; }
+std::vector<std::string> const &SelectBotMenu::options()
+{
+    return _bots;
+}
 
-const std::vector<std::string>& TrainMenu::Options() { return _options; }
+std::unique_ptr<Menu> SelectBotMenu::next(int choice)
+{
+    if (choice < _bots.size())
+    {
+        _watch_bot(_bots[choice]);
+        return _factory->create_main_menu();
+    }
+    return {nullptr};
+}
 
-std::unique_ptr<Menu> TrainMenu::Next(int choice) {
-  switch (choice) {
+TrainMenu::TrainMenu(MenuFactory *factory) : _factory{factory} {}
+
+std::string const &TrainMenu::title()
+{
+    return _title;
+}
+
+std::vector<std::string> const &TrainMenu::options()
+{
+    return _options;
+}
+
+auto TrainMenu::next(int choice) -> std::unique_ptr<Menu>
+{
+    switch (choice)
+    {
     case 0:
-      return _factory->CreateParametersMenu();
+        return _factory->create_parameters_menu();
     case 1:
-      return _factory->CreateMainMenu();
+        return _factory->create_main_menu();
     default:
-      return std::unique_ptr<Menu>(nullptr);
-  }
+        return {nullptr};
+    }
 }
 
-ParametersMenu::ParametersMenu(
-    MenuFactory* factory, std::vector<std::string> parameters,
-    std::function<void(const std::string&)> train_bot)
-    : _factory{factory},
-      _parameters{parameters},
-      _train_bot{std::move(train_bot)} {
-  _parameters.emplace_back("Back to Main Menu");
+ParametersMenu::ParametersMenu(MenuFactory *factory,
+                               std::vector<std::string> parameters,
+                               std::function<void(std::string const &)> train_bot)
+    : _factory{factory}, _parameters{std::move(parameters)},
+      _train_bot{std::move(train_bot)}
+{
+    _parameters.emplace_back("Back to Main Menu");
 }
 
-const std::string& ParametersMenu::Title() { return _title; }
-
-const std::vector<std::string>& ParametersMenu::Options() {
-  return _parameters;
+std::string const &ParametersMenu::title()
+{
+    return _title;
 }
 
-std::unique_ptr<Menu> ParametersMenu::Next(int choice) {
-  if (choice < _parameters.size() - 1) {
-    _train_bot(_parameters[choice]);
-  }
-  if (choice < _parameters.size()) {
-    return _factory->CreateMainMenu();
-  }
-  return std::unique_ptr<Menu>(nullptr);
+std::vector<std::string> const &ParametersMenu::options()
+{
+    return _parameters;
+}
+
+std::unique_ptr<Menu> ParametersMenu::next(int choice)
+{
+    if (choice < _parameters.size() - 1)
+    {
+        _train_bot(_parameters[choice]);
+    }
+    if (choice < _parameters.size())
+    {
+        return _factory->create_main_menu();
+    }
+    return {nullptr};
 }

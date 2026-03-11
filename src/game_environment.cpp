@@ -1,83 +1,123 @@
 #include "game_environment.h"
 
-#include <tuple>
-
 #include "game.h"
+#include "snake.h"
+#include <memory>
+#include <ostream>
+#include <tuple>
+#include <utility>
+#include <vector>
 
-GameEnvironment::GameEnvironment(std::unique_ptr<Game> game)
-    : _game{std::move(game)} {
-  UpdateGameState();
+namespace
+{
+double constexpr death_reward{-100};
+double constexpr movement_penalty{-0.1};
+double constexpr feed_reward{1.0};
+} // namespace
+
+GameEnvironment::GameEnvironment(std::unique_ptr<Game> game) : _game{std::move(game)}
+{
+    update_game_state();
 }
 
-bool GameState::operator==(const GameState& rhs) const {
-  return std::tie(body_to_food) == std::tie(rhs.body_to_food);
+auto GameState::operator==(GameState const &rhs) const -> bool
+{
+    return std::tie(body_to_food) == std::tie(rhs.body_to_food);
 }
 
-bool GameState::operator!=(const GameState& rhs) const {
-  return !(rhs == *this);
+auto GameState::operator!=(GameState const &rhs) const -> bool
+{
+    return !(rhs == *this);
 }
 
-bool GameState::operator<(const GameState& rhs) const {
-  return std::tie(body_to_food) < std::tie(rhs.body_to_food);
+auto GameState::operator<(GameState const &rhs) const -> bool
+{
+    return std::tie(body_to_food) < std::tie(rhs.body_to_food);
 }
 
-bool GameState::operator>(const GameState& rhs) const { return rhs < *this; }
-
-bool GameState::operator<=(const GameState& rhs) const {
-  return !(rhs < *this);
+auto GameState::operator>(GameState const &rhs) const -> bool
+{
+    return rhs < *this;
 }
 
-bool GameState::operator>=(const GameState& rhs) const {
-  return !(*this < rhs);
+auto GameState::operator<=(GameState const &rhs) const -> bool
+{
+    return !(rhs < *this);
 }
 
-GameState GameState::Create(Game& game) {
-  auto food = game.GetFood().GetLocation();
-  std::vector<snake::Point<int>> body_to_food;
-  body_to_food.push_back(
-      {static_cast<int>(food.x - game.GetSnake().GetHeadX()),
-       static_cast<int>(food.y - game.GetSnake().GetHeadY())});
-  for (const auto& part : game.GetSnake().GetBody()) {
-    body_to_food.push_back({food.x - part.x, food.y - part.y});
-  }
-  return GameState{body_to_food};
+auto GameState::operator>=(GameState const &rhs) const -> bool
+{
+    return !(*this < rhs);
 }
 
-std::ostream& operator<<(std::ostream& os, const GameState& state) {
-  for (const auto& part : state.body_to_food) {
-    os << part.x << ",";
-    os << part.y << ",";
-  }
-  return os;
+auto GameState::create(Game &game) -> GameState
+{
+    auto food = game.get_food().get_location();
+    std::vector<snake::Point<int>> body_to_food;
+    body_to_food.push_back(
+        {static_cast<int>(static_cast<float>(food.x) - game.get_snake().get_head_x()),
+         static_cast<int>(static_cast<float>(food.y) - game.get_snake().get_head_y())});
+    for (auto const &part : game.get_snake().get_body())
+    {
+        body_to_food.push_back({food.x - part.x, food.y - part.y});
+    }
+    return GameState{body_to_food};
 }
 
-void GameEnvironment::Update(const snake::Direction& action) {
-  if (!_alive) {
-    _reward = 0;
-    return;
-  }
-  auto score = _game->GetScore();
-  _game->GetSnake().SetDirection(action);
-  _game->GetSnake().SetSpeed(1);
-  _game->Update();
-  UpdateGameState();
-  if (!_game->GetSnake().IsAlive()) {
-    _alive = false;
-    _reward = -100;
-  } else if (_game->GetScore() > score) {
-    _reward = 1;
-  } else {
-    _reward = -0.1;
-  }
+auto operator<<(std::ostream &os, GameState const &state) -> std::ostream &
+{
+    for (auto const &part : state.body_to_food)
+    {
+        os << part.x << ",";
+        os << part.y << ",";
+    }
+    return os;
 }
 
-void GameEnvironment::UpdateGameState() {
-  auto& food = _game->GetFood().GetLocation();
-  _state = GameState::Create(*_game);
+void GameEnvironment::update(snake::Direction const &action)
+{
+    if (!_alive)
+    {
+        _reward = 0;
+        return;
+    }
+    auto score = _game->get_score();
+    _game->get_snake().set_direction(action);
+    _game->get_snake().set_speed(1.0F);
+    _game->update();
+    update_game_state();
+    if (!_game->get_snake().is_alive())
+    {
+        _alive  = false;
+        _reward = death_reward;
+    }
+    else if (_game->get_score() > score)
+    {
+        _reward = feed_reward;
+    }
+    else
+    {
+        _reward = movement_penalty;
+    }
 }
 
-const GameState& GameEnvironment::GetState() { return _state; }
+void GameEnvironment::update_game_state()
+{
+    auto const &food = _game->get_food().get_location();
+    _state           = GameState::create(*_game);
+}
 
-double GameEnvironment::GetReward() { return _reward; }
+GameState const &GameEnvironment::get_state()
+{
+    return _state;
+}
 
-bool GameEnvironment::HasTerminated() { return !_alive; }
+auto GameEnvironment::get_reward() -> double
+{
+    return _reward;
+}
+
+auto GameEnvironment::has_terminated() -> bool
+{
+    return !_alive;
+}

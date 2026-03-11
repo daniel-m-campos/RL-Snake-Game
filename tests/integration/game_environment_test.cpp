@@ -1,4 +1,7 @@
-#include "gtest/gtest.h"
 #include "trainer.h"
+#include "gtest/gtest.h"
 
-TEST(GameEnvironmentTests, TestSimulationLoop) { Train(16, 16); }
+TEST(GameEnvironmentTests, TestSimulationLoop)
+{
+    train(16, 16);
+}

@@ -1,17 +1,28 @@
-#ifndef RLSNAKEGAME_MAIN_UTILS_H
-#define RLSNAKEGAME_MAIN_UTILS_H
+#pragma once
+#include <cstddef>
 
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
 
-void GameLoop(Game& game, Controller& controller, Renderer& renderer,
-              std::size_t target_frame_duration);
+namespace main_utils_defaults
+{
+std::size_t constexpr grid_width{32};
+std::size_t constexpr grid_height{32};
+std::size_t constexpr frames_per_second{60};
+std::size_t constexpr screen_width{640};
+std::size_t constexpr screen_height{640};
+} // namespace main_utils_defaults
 
-void Play(Controller& controller, std::size_t grid_width = 32,
-          std::size_t grid_height = 32, std::size_t frames_per_second = 60,
-          std::size_t screen_width = 640, std::size_t screen_height = 640);
+void game_loop(Game &game, Controller &controller, Renderer &renderer,
+               std::size_t target_frame_duration);
 
-void Print(const Game& game);
+// NOLINT(bugprone-easily-swappable-parameters)
+void play(Controller &controller,
+          std::size_t grid_width        = main_utils_defaults::grid_width,
+          std::size_t grid_height       = main_utils_defaults::grid_height,
+          std::size_t frames_per_second = main_utils_defaults::frames_per_second,
+          std::size_t screen_width      = main_utils_defaults::screen_width,
+          std::size_t screen_height     = main_utils_defaults::screen_height);
 
-#endif  // RLSNAKEGAME_MAIN_UTILS_H
+void print(Game const &game);

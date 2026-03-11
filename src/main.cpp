@@ -1,7 +1,11 @@
 #include "game_menu_factory.h"
 #include "gui.h"
+#include <cstdlib>
+#include <memory>
 
-int main() {
-  GUI gui{std::make_unique<GameMenuFactory>()};
-  gui.Show();
+auto main() -> int
+{
+    GUI gui{std::make_unique<GameMenuFactory>()};
+    gui.show();
+    return EXIT_SUCCESS;
 }

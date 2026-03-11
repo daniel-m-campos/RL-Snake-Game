@@ -1,29 +1,33 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#pragma once
 
-#include <vector>
-
-#include "SDL.h"
 #include "food.h"
 #include "snake.h"
+#include <cstddef>
 
-class Renderer {
- public:
-  Renderer(std::size_t screen_width, std::size_t screen_height,
-           std::size_t grid_width, std::size_t grid_height);
-  ~Renderer();
+struct SDL_Window;   // IWYU pragma: keep
+struct SDL_Renderer; // IWYU pragma: keep
 
-  void Render(snake::Snake const &snake, Food const &food);
-  void UpdateWindowTitle(int score, int fps);
+class Renderer
+{
+  public:
+    // NOLINT(bugprone-easily-swappable-parameters)
+    Renderer(std::size_t screen_width, std::size_t screen_height,
+             std::size_t grid_width, std::size_t grid_height);
+    Renderer(Renderer const &)                     = delete;
+    auto operator=(Renderer const &) -> Renderer & = delete;
+    Renderer(Renderer &&)                          = default;
+    auto operator=(Renderer &&) -> Renderer &      = default;
+    ~Renderer();
 
- private:
-  SDL_Window *sdl_window;
-  SDL_Renderer *sdl_renderer;
+    void render(snake::Snake const &snake, Food const &food);
+    void update_window_title(int score, int fps);
 
-  const std::size_t screen_width;
-  const std::size_t screen_height;
-  const std::size_t grid_width;
-  const std::size_t grid_height;
+  private:
+    SDL_Window *sdl_window;
+    SDL_Renderer *sdl_renderer;
+
+    std::size_t screen_width;
+    std::size_t screen_height;
+    std::size_t grid_width;
+    std::size_t grid_height;
 };
-
-#endif

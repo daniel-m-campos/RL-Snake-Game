@@ -1,13 +1,24 @@
-#ifndef RLSNAKEGAME_TRAINER_H
-#define RLSNAKEGAME_TRAINER_H
+#pragma once
 
+#include <cstddef>
+#include <cstdint>
 #include <string>
 
-void Train(std::size_t grid_width, std::size_t grid_height,
-           long num_episodes = 1'000, long max_steps = 1'000'000,
-           double epsilon = 0.5, double discount_factor = 0.9,
-           double step_size = 0.5);
+namespace trainer_defaults
+{
+int64_t constexpr num_episodes{1'000};
+int64_t constexpr max_steps{1'000'000};
+double constexpr epsilon{0.5};
+double constexpr discount_factor{0.9};
+double constexpr step_size{0.5};
+} // namespace trainer_defaults
 
-std::string FileName(std::size_t grid_width, std::size_t grid_height);
+// NOLINT(bugprone-easily-swappable-parameters)
+void train(std::size_t grid_width, std::size_t grid_height,
+           int64_t num_episodes   = trainer_defaults::num_episodes,
+           int64_t max_steps      = trainer_defaults::max_steps,
+           double epsilon         = trainer_defaults::epsilon,
+           double discount_factor = trainer_defaults::discount_factor,
+           double step_size       = trainer_defaults::step_size);
 
-#endif  // RLSNAKEGAME_TRAINER_H
+auto file_name(std::size_t grid_width, std::size_t grid_height) -> std::string;

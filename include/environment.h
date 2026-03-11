@@ -1,14 +1,16 @@
-#ifndef RLSNAKEGAME_ENVIRONMENT_H
-#define RLSNAKEGAME_ENVIRONMENT_H
+#pragma once
 
-template <typename S, typename A>
-class Environment {
- public:
-  virtual ~Environment() = default;
-  virtual void Update(const A&) = 0;
-  virtual const S& GetState() = 0;
-  virtual double GetReward() = 0;
-  virtual bool HasTerminated() = 0;
+template <typename S, typename A> class Environment
+{
+  public:
+    virtual ~Environment()                               = default;
+    Environment()                                        = default;
+    Environment(Environment const &)                     = default;
+    auto operator=(Environment const &) -> Environment & = default;
+    Environment(Environment &&)                          = default;
+    auto operator=(Environment &&) -> Environment &      = default;
+    virtual void update(A const &)                       = 0;
+    virtual auto get_state() -> S const &                = 0;
+    virtual auto get_reward() -> double                  = 0;
+    virtual auto has_terminated() -> bool                = 0;
 };
-
-#endif  // RLSNAKEGAME_ENVIRONMENT_H

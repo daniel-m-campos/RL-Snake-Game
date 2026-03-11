@@ -1,99 +1,130 @@
-#ifndef SNAKE_H
-#define SNAKE_H
+#pragma once
 
+#include <cstddef>
+#include <cstdint>
 #include <ostream>
 #include <set>
 #include <tuple>
 #include <vector>
 
-namespace snake {
+namespace snake
+{
 
-enum class Direction {
-  kUp,
-  kDown,
-  kLeft,
-  kRight,
+enum class Direction : std::uint8_t
+{
+    kUp,
+    kDown,
+    kLeft,
+    kRight,
 };
 
-std::ostream &operator<<(std::ostream &os, Direction action);
+auto operator<<(std::ostream &os, Direction action) -> std::ostream &;
 
-Direction GetOpposite(const Direction &);
+auto get_opposite(Direction const &) -> Direction;
 
-const std::set<Direction> Directions{
+std::set<Direction> const directions{
     Direction::kUp,
     Direction::kDown,
     Direction::kLeft,
     Direction::kRight,
 };
 
-template <typename T>
-struct Point {
-  T x;
-  T y;
-  bool operator==(const Point &rhs) const {
-    return std::tie(x, y) == std::tie(rhs.x, rhs.y);
-  }
-  bool operator!=(const Point &rhs) const { return rhs != *this; }
-  bool operator<(const Point &rhs) const {
-    return std::tie(x, y) < std::tie(rhs.x, rhs.y);
-  }
-  bool operator>(const Point &rhs) const { return rhs < *this; }
-  bool operator<=(const Point &rhs) const { return rhs >= *this; }
-  bool operator>=(const Point &rhs) const { return *this >= rhs; }
+template <typename T> struct Point
+{
+    T x;
+    T y;
+    auto operator==(Point const &rhs) const -> bool
+    {
+        return std::tie(x, y) == std::tie(rhs.x, rhs.y);
+    }
+    auto operator!=(Point const &rhs) const -> bool
+    {
+        return rhs != *this;
+    }
+    auto operator<(Point const &rhs) const -> bool
+    {
+        return std::tie(x, y) < std::tie(rhs.x, rhs.y);
+    }
+    auto operator>(Point const &rhs) const -> bool
+    {
+        return rhs < *this;
+    }
+    auto operator<=(Point const &rhs) const -> bool
+    {
+        return rhs >= *this;
+    }
+    auto operator>=(Point const &rhs) const -> bool
+    {
+        return *this >= rhs;
+    }
 };
 
-class Snake {
- public:
-  virtual ~Snake() = default;
-  virtual void Update() = 0;
-  virtual void GrowBody() = 0;
-  virtual bool SnakeCell(int x, int y) const = 0;
-  virtual size_t Size() const = 0;
-  virtual Direction GetDirection() const = 0;
-  virtual void SetDirection(Direction direction) = 0;
-  virtual bool IsAlive() const = 0;
-  virtual float GetHeadX() const = 0;
-  virtual float GetHeadY() const = 0;
-  virtual float GetSpeed() const = 0;
-  virtual void SetSpeed(float speed) = 0;
-  virtual const std::vector<Point<int>> &GetBody() const = 0;
+class Snake
+{
+  public:
+    Snake()                                                 = default;
+    Snake(Snake const &)                                    = delete;
+    auto operator=(Snake const &) -> Snake &                = delete;
+    Snake(Snake &&)                                         = default;
+    auto operator=(Snake &&) -> Snake &                     = default;
+    virtual ~Snake()                                        = default;
+    virtual void update()                                   = 0;
+    virtual void grow_body()                                = 0;
+    virtual auto snake_cell(int x, int y) const -> bool     = 0;
+    virtual auto size() const -> size_t                     = 0;
+    virtual auto get_direction() const -> Direction         = 0;
+    virtual void set_direction(Direction direction)         = 0;
+    virtual auto is_alive() const -> bool                   = 0;
+    virtual auto get_head_x() const -> float                = 0;
+    virtual auto get_head_y() const -> float                = 0;
+    virtual auto get_speed() const -> float                 = 0;
+    virtual void set_speed(float speed)                     = 0;
+    virtual std::vector<Point<int>> const &get_body() const = 0;
 };
 
-class GridSnake : public Snake {
- public:
-  GridSnake(int grid_width, int grid_height)
-      : _grid_width(grid_width),
-        _grid_height(grid_height),
-        _head_x(grid_width / 2),
-        _head_y(grid_height / 2) {}
+inline float constexpr initial_snake_speed{0.1F};
+inline float constexpr grid_center_divisor{2.0F};
 
-  void Update() override;
-  void GrowBody() override;
-  bool SnakeCell(int x, int y) const override;
-  size_t Size() const override;
-  enum Direction GetDirection() const override;
-  void SetDirection(Direction direction) override;
-  bool IsAlive() const override;
-  float GetHeadX() const override;
-  float GetHeadY() const override;
-  float GetSpeed() const override;
-  void SetSpeed(float speed) override;
-  const std::vector<Point<int>> &GetBody() const override;
+// NOLINTBEGIN(bugprone-easily-swappable-parameters)
+class GridSnake : public Snake
+{
+  public:
+    GridSnake(int grid_width, int grid_height)
+        : _grid_width(grid_width), _grid_height(grid_height),
+          _head_x(static_cast<float>(grid_width) / grid_center_divisor),
+          _head_y(static_cast<float>(grid_height) / grid_center_divisor)
+    {
+    }
+    // NOLINTEND(bugprone-easily-swappable-parameters)
 
- private:
-  void UpdateHead();
-  void UpdateBody(Point<int> &current_cell, Point<int> &prev_cell);
+    void update() override;
+    void grow_body() override;
+    auto snake_cell(int x, int y) const -> bool override;
+    auto size() const -> size_t override;
+    auto get_direction() const -> Direction override;
+    void set_direction(Direction direction) override;
+    auto is_alive() const -> bool override;
+    auto get_head_x() const -> float override;
+    auto get_head_y() const -> float override;
+    auto get_speed() const -> float override;
+    void set_speed(float speed) override;
+    auto get_body() const -> std::vector<Point<int>> const & override;
 
-  bool _growing{false};
-  int _grid_width;
-  int _grid_height;
-  enum Direction _direction = Direction::kUp;
-  float _speed{0.1f};
-  int _size{1};
-  bool _alive{true};
-  float _head_x;
-  float _head_y;
-  std::vector<Point<int>> _body;
+  private:
+    void update_head();
+    // NOLINTBEGIN(bugprone-easily-swappable-parameters)
+    void update_body(Point<int> &current_cell, Point<int> &prev_cell);
+    // NOLINTEND(bugprone-easily-swappable-parameters)
+
+    bool _growing{false};
+    int _grid_width;
+    int _grid_height;
+    Direction _direction = Direction::kUp;
+    float _speed{initial_snake_speed};
+    int _size{1};
+    bool _alive{true};
+    float _head_x;
+    float _head_y;
+    std::vector<Point<int>> _body;
 };
-}  // namespace snake
-#endif
+} // namespace snake
